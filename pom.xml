@@ -19,42 +19,30 @@
                 <groupId>io.cucumber</groupId>
                 <artifactId>cucumber-java</artifactId>
                 <scope>test</scope>
-                <version>RELEASE</version>
+                <version>7.20.1</version>
             </dependency>
             <dependency>
                 <groupId>io.cucumber</groupId>
                 <artifactId>cucumber-junit</artifactId>
-                <version>RELEASE</version>
+                <version>7.20.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
-                <version>RELEASE</version>
+                <version>4.26.0</version>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
-                <version>RELEASE</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.github.bonigarcia</groupId>
-                <artifactId>webdrivermanager</artifactId>
-                <version>RELEASE</version>
-                <scope>test</scope>
+                <version>5.4.2</version>
             </dependency>
 
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-devtools-v129</artifactId>
-                <version>RELEASE</version>
+                <version>4.26.0</version>
             </dependency>
 
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>RELEASE</version>
-            </dependency>
         </dependencies>
     </project>
