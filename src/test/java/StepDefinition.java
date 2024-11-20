@@ -6,11 +6,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class StepDefinition {
 
@@ -18,7 +20,15 @@ public class StepDefinition {
     @BeforeAll
     public static void createDriver()
     {
-        driver = new ChromeDriver();
+        ChromeOptions option = new ChromeOptions();
+        option.addArguments("--remote-allow-origin=*");
+        option.addArguments("incognito");
+        option.addArguments("-start-maximized");
+        option.addArguments("--disable-infobars");
+        option.addArguments("--disable-blink-features=AutomationControlled");
+        option.addArguments("--headless");
+
+        driver = new ChromeDriver(option);
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
