@@ -1,9 +1,7 @@
-#Feature: [Feature Name]
-#[Short description of the feature or functionality being tested]
+Feature: Webshop Test
+Automatic webshop test for the school.
 
-#  Background:
-#    Given [initial context or shared setup for all scenarios]
-
-#  Scenario: [Scenario description]
-#    When [action or event being tested]
-#    Then [expected outcome or result]
+  Scenario: Verify that the website copyright text displays correctly
+    Given Webshop is available
+    When User visits webshop-agil-testautomatiserare.netlify.app
+    Then the copyright text should be "© 2023 The Shop"
