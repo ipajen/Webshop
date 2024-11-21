@@ -10,3 +10,9 @@ Automatic webshop test for the school.
     Given Webshop is available
     When User visits webshop-agil-testautomatiserare.netlify.app
     Then the console logs should not contain errors
+
+  Scenario: Validate SSL certificate
+    Given Webshop is available
+    When User visits webshop-agil-testautomatiserare.netlify.app
+    Then the SSL certificate should be valid and not expiring in 60 days
+
