@@ -5,3 +5,8 @@ Automatic webshop test for the school.
     Given Webshop is available
     When User visits webshop-agil-testautomatiserare.netlify.app
     Then the copyright text should be "© 2023 The Shop"
+
+  Scenario: Verify that there are no uncaught syntax errors in the browser console logs
+    Given Webshop is available
+    When User visits webshop-agil-testautomatiserare.netlify.app
+    Then the console logs should not contain errors
