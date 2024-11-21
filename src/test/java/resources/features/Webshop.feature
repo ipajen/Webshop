@@ -1,12 +1,9 @@
 Feature: Webshop Test
-Automatic webshop test for the school.
+  Automation Testing Of the Webshop for the ITHS project
 
-  Scenario: Verify that the website copyright text displays correctly
-    Given Webshop is available
-    When User visits webshop-agil-testautomatiserare.netlify.app
-    Then the copyright text should be "© 2023 The Shop"
 
-  Scenario: Validate SSL certificate
+  Scenario: User checks the main heading text
     Given Webshop is available
-    When User visits webshop-agil-testautomatiserare.netlify.app
-    Then the SSL certificate should be valid and not expiring in 60 days
+    When User checks the main heading
+    Then the main heading should be "This shop is all you need"
+
