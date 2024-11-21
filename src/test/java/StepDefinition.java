@@ -75,8 +75,8 @@ public class StepDefinition {
                     syntaxErrorFound = true;
 
                 }
-                assertTrue(!syntaxErrorFound, "Test failed: Uncaught SyntaxError found in JavaScript logs.");
             }
+        assertTrue(!syntaxErrorFound, "Test failed: Uncaught SyntaxError found in JavaScript logs.");
         }
     }
 
