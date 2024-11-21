@@ -15,7 +15,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
@@ -29,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class StepDefinition {
 
     private static WebDriver driver;
+
     @BeforeAll
     public static void createDriver()
     {
@@ -87,7 +87,6 @@ public class StepDefinition {
             }
         assertTrue(!syntaxErrorFound, "Test failed: Uncaught SyntaxError found in JavaScript logs.");
         }
-    }
 
     //Validate SSL certificate
     //Author: Jarko Piironen
@@ -117,4 +116,5 @@ public class StepDefinition {
         }
     }
 }
+
 
