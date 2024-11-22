@@ -31,7 +31,7 @@ public class CheckWebshopStepDefinition {
         options.addArguments("--disable-infobars");
         options.addArguments("--disable-blink-features=AutomationControlled");
         // Uncomment below for headless mode if required
-        // options.addArguments("--headless");
+         options.addArguments("--headless");
 
         // Initialize WebDriver
         driver = new ChromeDriver(options);
