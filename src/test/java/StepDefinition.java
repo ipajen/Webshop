@@ -8,14 +8,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
+import java.util.List;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class StepDefinition {
 
     private static WebDriver driver;
+
     @BeforeAll
     public static void createDriver()
     {
@@ -67,6 +71,23 @@ public class StepDefinition {
     public void userVisitsWebshopAgilTestautomatiserareNetlifyApp() {
     }
 
+    //Verify that there are no uncaught syntax errors in the browser console logs
+    @Then("the console logs should not contain errors")
+    //Author: Jarko Piironen
+    public void theConsoleLogsShouldNotContainErrors() {
+            LogEntries logs = driver.manage().logs().get(LogType.BROWSER);
+            boolean syntaxErrorFound = false;
+            List<LogEntry> Alllogs = logs.getAll();
+            for (LogEntry entry : Alllogs) {
+                System.out.println(driver + " Console Error test " + entry.getMessage());
+                if (entry.getMessage().contains("Uncaught SyntaxError")) {
+                    syntaxErrorFound = true;
+
+                }
+            }
+        assertTrue(!syntaxErrorFound, "Test failed: Uncaught SyntaxError found in JavaScript logs.");
+        }
+
     //Validate SSL certificate
     //Author: Jarko Piironen
     @Then("the SSL certificate should be valid and not expiring in {int} days")
@@ -95,4 +116,5 @@ public class StepDefinition {
         }
     }
 }
+
 
