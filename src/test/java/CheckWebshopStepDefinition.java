@@ -4,6 +4,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -99,5 +100,48 @@ public class CheckWebshopStepDefinition {
             System.out.println("The image alt text is: " + altText);
         }
     }
+    //  verify Billing and Payment headings on check out page
+    @Given("the user is on the webshop homepage")
+    public void theUserIsOnTheWebshopHomepage() {
+
+    }
+    @When("the user scrolls down to the {string} link")
+    public void theUserScrollsDownToTheLink(String linkText) {
+        // Locate the element by its link text
+        WebElement element = driver.findElement(By.linkText(linkText));
+
+        // Scroll into view
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+    }
+
+    @Then("the user clicks the {string} link")
+    public void theUserClicksTheLink(String linkText) {
+        // wait till the element is visible
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        // Locate the element by its link text and click it
+        WebElement element = driver.findElement(By.linkText(linkText));
+        element.click();
+    }
+    @When("the user scrolls down to the {string} heading")
+    public void theUserScrollsDownToTheHeading(String headingText) {
+        //Wait till the page loads
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        // Locate the element by its text
+        WebElement headingElement = driver.findElement(By.xpath("//h4[@class='mb-3' and text()='" + headingText + "']"));
+
+        // Scroll into view
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", headingElement);
+    }
+    @Then("the {string} heading text should be {string}")
+    public void theHeadingTextShouldBe(String headingType, String expectedText) {
+        // Locate the heading element by its text
+        WebElement headingElement = driver.findElement(By.xpath("//h4[@class='mb-3' and text()='" + expectedText + "']"));
+
+        // Verify the text
+        String actualText = headingElement.getText();
+        assertEquals(expectedText, actualText, headingType + " heading text does not match.");
+    }
+
+
 }
 
