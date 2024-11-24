@@ -1,3 +1,4 @@
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -107,7 +108,7 @@ public class StepDefinition {
             Date currentDate = new Date();
             long daysRemaining = (expiryDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
 
-            // Check if the certificate is valid and has more than 30 days before expiry
+     // Check if the certificate is valid and has more than 30 days before expiry
         assertTrue(daysRemaining > minDays, "SSL Certificate is expiring in less than " + minDays + " days!");
         System.out.println("SSL Certificate is valid and expires in " + daysRemaining + " days.");
     } catch (Exception e) {
@@ -115,6 +116,87 @@ public class StepDefinition {
         Assertions.fail("Failed to retrieve SSL certificate: " + e.getMessage());
         }
     }
+
+    // Validate Search Functionality
+    // Author: Jarko Piironen
+    @When("User visits the products page at {string}")
+    public void userVisitsTheProductsPageAt(String productsUrl) {
+        try {
+            // Wait for the "Products" link to be clickable
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            WebElement productsLink = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.cssSelector("header > div > div > ul > li:nth-child(2) > a"))
+            );
+
+            // Click the "Products" link
+            productsLink.click();
+            System.out.println("Clicked on the Products link from the homepage successfully.");
+        } catch (Exception e) {
+            System.out.println("Failed to click on the Products link: " + e.getMessage());
+            Assertions.fail("Test failed because the 'Products' link could not be clicked.");
+        }
+    }
+
+    @And("User searches for {string}")
+    public void userSearchesFor(String searchQuery) {
+        try {
+            // Wait for the specific element containing the expected product name to be visible
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            WebElement productElement = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#main > div:nth-child(1) > div > div > h3"))
+            );
+
+            // Ensure the element contains the expected product name text
+            //NOTE: This part is needed as if the search is made to quickly it will not find anything until page loaded
+            // (Not working with only extra wait)
+            if (productElement.getText().contains("Fjällräven - Foldsack No. 1 Backpack, Fits 15 Laptops")) {
+                System.out.println("Found the expected product: Fjällräven - Foldsack No. 1 Backpack.");
+            } else {
+                System.out.println("Expected product not found.");
+            }
+
+            // Wait for the "search" bar to be visible and clickable
+            WebElement searchbar = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.id("search"))
+            );
+
+            // Input the search query into the search bar
+            searchbar.clear(); //clears the box
+            searchbar.sendKeys(searchQuery);
+            System.out.println("Search for '" + searchQuery + "' initiated successfully.");
+        } catch (Exception e) {
+            System.out.println("Failed to perform search operation: " + e.getMessage());
+            Assertions.fail("Test failed because the search operation could not be completed.");
+        }
+    }
+
+    @Then("the search results should display items related to {string}")
+    public void theSearchResultsShouldDisplayItemsRelatedTo(String searchQuery) {
+        try {
+            // Wait for the specific element in the search results to be visible
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            WebElement resultItem = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#main > div:nth-child(1) > div > div > h3"))
+            );
+
+            // Get the text of the result item
+            String resultText = resultItem.getText();
+
+            // Validate that the text matches the expected search query
+            Assertions.assertTrue(
+                    resultText.contains(searchQuery),
+                    "Expected search result text to contain: '" + searchQuery + "', but got: '" + resultText + "'."
+            );
+
+            System.out.println("Search results contain the expected item: '" + searchQuery + "'.");
+
+        } catch (Exception e) {
+            System.out.println("Failed to validate search results: " + e.getMessage());
+            Assertions.fail("Test failed because the expected search result was not found.");
+        }
+    }
+
+
 }
 
 
