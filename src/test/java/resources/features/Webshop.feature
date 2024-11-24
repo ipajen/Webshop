@@ -22,6 +22,3 @@ Automatic webshop test for the school.
     And User searches for "Gold"
     Then the search results should display items related to "Gold"
     #TODO search with gold and another with press enter.
-    #And User searches for "gold"
-    #Then the search results should display items related to "gold"
-    #users press enter
