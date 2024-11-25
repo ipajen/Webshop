@@ -1,78 +1,59 @@
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.BeforeAll;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
 public class StepDefinition {
 
-    private static WebDriver driver;  // Instance variable for WebDriver
-    private  static WebDriverWait wait;
+    private static WebDriver driver;
+    @BeforeAll
+    public static void createDriver()
+    {
+        ChromeOptions option = new ChromeOptions();
+        option.addArguments("--remote-allow-origin=*");
+        option.addArguments("incognito");
+        option.addArguments("-start-maximized");
+        option.addArguments("--disable-infobars");
+        option.addArguments("--disable-blink-features=AutomationControlled");
+        option.addArguments("--headless");
 
-    @Before
-    public  static void createDriver() {
-        // Setup ChromeDriver options
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origin=*");
-        options.addArguments("incognito");
-        options.addArguments("--start-maximized");
-        options.addArguments("--disable-infobars");
-        options.addArguments("--disable-blink-features=AutomationControlled");
-        // Uncomment below for headless mode if required
-        // options.addArguments("--headless");
-
-        // Initialize WebDriver
-        driver = new ChromeDriver(options);
-
-        // Initialize WebDriverWait
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        // Navigate to the Webpage
+        driver = new ChromeDriver(option);
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
-    @After
-    public void tearDown() {
-        // Close the browser if the driver is not null
-        if (driver != null) {
-            driver.quit();
-        }
-    }
+    @Then("the copyright text should be {string}")
+    //Author: Jarko Piironen
+    public void theCopyrightTextShouldBe(String expectedCopyrightText) {
 
-    // Check the website Title & Heading
-    //    Author: Barnali Mohanty
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement websiteCopyright = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector("  body > div:nth-child(3) > footer > p"))
+        );
+      
+        // Get the text from the copyright element
+        String websiteCopyrightText = websiteCopyright.getText();
+        System.out.println(" - Copyright text: " + websiteCopyrightText);
+
+        assertEquals(expectedCopyrightText, websiteCopyrightText);
+    }
 
     @Given("Webshop is available")
     public void webshopIsAvailable() {
     }
 
-    @When("User checks the title")
-    public void userChecksTheTitle() {
-        // Placeholder step for checking the title,No need of code
-    }
 
-    @Then("the title should be {string}")
-    public void theTitleOfThePageShouldBe(String expectedTitle) {
-        // Get the title of the current page
-        String actualTitle = driver.getTitle();
-        assertEquals(expectedTitle, actualTitle, "Page title does  match the expected value.");
-    }
-
-    @Then("the heading should be {string}")
-    public void theHeadingShouldBe(String expectedHeadingText) {
-        // Locate the main heading using a CSS selector
-        WebElement heading = driver.findElement(By.cssSelector("body > header > div > div > a > h1"));
-
-        // Validate the text of the heading
-        assertEquals(expectedHeadingText, heading.getText(), "Page heading does  match the expected value.");
+    @When("User visits webshop-agil-testautomatiserare.netlify.app")
+    public void userVisitsWebshopAgilTestautomatiserareNetlifyApp() {
     }
 }
