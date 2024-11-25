@@ -16,3 +16,12 @@ Feature: Webshop Test
     Then the "Billing address" heading text should be "Billing address"
     And the user scrolls down to the "Payment" heading
     Then the "Payment" heading text should be "Payment"
+
+  Scenario: Verify items in the cart
+    Given the user is on the webpage
+    When the user clicks the "Shop" button
+    And the user scrolls down to the "Add to Cart" button for "Mens Casual Premium Slim Fit T-Shirts"
+    And the user clicks the "Add to Cart" button
+    And the user clicks the "Checkout" button
+    Then the item "Mens Casual Premium Slim Fit T-Shirts" should be present in the cart
+    And the item "Non-Existing Item" should not be present in the cart
