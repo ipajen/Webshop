@@ -142,6 +142,49 @@ public class CheckWebshopStepDefinition {
         assertEquals(expectedText, actualText, headingType + " heading text does not match.");
     }
 
+    @Given("I open the web page {string}")
+    public void i_open_the_web_page(String url) {
+
+    }
+    @When("I check the {string} attribute of the {string} tag")
+    public void i_check_the_attribute_of_the_tag(String attribute, String tagName) {
+        // Find the <html> element and get the 'lang' attribute
+        WebElement element = driver.findElement(By.tagName(tagName));
+        String langValue = element.getAttribute(attribute);
+
+        // Store the result for later verification
+        System.setProperty("langValue", langValue);
+    }
+    @Then("the language should be {string}")
+    public void the_language_should_be(String expectedLanguage) {
+
+            // Retrieve the stored attribute value
+            String actualLanguage = System.getProperty("langValue");
+            assertEquals(expectedLanguage, actualLanguage);
+
+        }
+
+
+
+
+    @Then("the content should appear in English")
+    public void the_content_should_appear_in_english() {
+        // Locate a prominent element on the page to validate the content
+        WebElement element = driver.findElement(By.tagName("h1")); // Adjust the locator as needed
+        String content = element.getText();
+
+        // Print the fetched content for debugging
+        System.out.println("Fetched Content: " + content);
+
+        // Check if the content contains expected English keywords or phrases
+        if (content.toLowerCase().contains("shop") || content.toLowerCase().contains("products") || content.toLowerCase().contains("checkout")) {
+            System.out.println("The content appears to be in English.");
+        } else {
+            System.err.println("The content does NOT appear to be in English.");
+        }
+
+
+    }
 
 }
 
