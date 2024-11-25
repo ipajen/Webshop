@@ -16,3 +16,9 @@ Feature: Webshop Test
     Then the "Billing address" heading text should be "Billing address"
     And the user scrolls down to the "Payment" heading
     Then the "Payment" heading text should be "Payment"
+
+  Scenario: Check if the declared language and content language match
+    Given I open the web page "https://webshop-agil-testautomatiserare.netlify.app/"
+    When I check the "lang" attribute of the "html" tag
+    Then the language should be "sv"
+    And the content should appear in English
