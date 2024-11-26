@@ -4,9 +4,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.BeforeAll;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogEntries;
@@ -194,9 +192,70 @@ public class StepDefinition {
             System.out.println("Failed to validate search results: " + e.getMessage());
             Assertions.fail("Test failed because the expected search result was not found.");
         }
+
+    }
+
+    //Verify navigation links
+    //Author: Jarko Piironen
+    @When("the user clicks the following {string} link")
+    public void theUserClicksTheFollowingLink(String linkText) {
+        String selector = getLinkSelector(linkText);
+
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+            WebElement linkElement;
+
+            // Attempt to locate the link with the primary selector
+            try {
+                linkElement = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(selector)));
+                System.out.println("Link found with primary selector: " + selector);
+            } catch (TimeoutException e) {
+                // Fallback to locating the link by visible text
+                System.out.println("Primary selector failed for link: " + linkText + ". Trying By.linkText.");
+                linkElement = wait.until(ExpectedConditions.elementToBeClickable(By.linkText(linkText)));
+            }
+
+            // Scroll into view with additional adjustments
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", linkElement);
+
+            // Adjust scroll position if necessary
+            ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -100);"); // Offset for sticky headers
+            Thread.sleep(500); // Small wait to let the page stabilize
+
+            // Ensure the element is clickable and attempt to click
+            wait.until(ExpectedConditions.elementToBeClickable(linkElement)).click();
+            System.out.println("Clicked on the link: " + linkText);
+
+        } catch (Exception e) {
+            System.out.println("Failed to click the link: " + linkText + " using selector: " + selector + ". Error: " + e.getMessage());
+            Assertions.fail("Could not click the link: " + linkText);
+        }
     }
 
 
+
+    @Then("the {string} page should be displayed")
+    public void thePageShouldBeDisplayed(String page) {
+        // Wait for the URL to change and assert the current URL
+        boolean isCorrectPage = new WebDriverWait(driver, Duration.ofSeconds(60))
+                .until(ExpectedConditions.urlToBe(page));
+        Assertions.assertTrue(isCorrectPage, "Expected page URL: " + page + ", but got: " + driver.getCurrentUrl());
+    }
+
+    private String getLinkSelector(String linkText) {
+        // Fallback selectors for more dynamic handling
+        switch (linkText.toLowerCase()) {
+            case "home":
+                return "[data-footer-link='home'], body > div:nth-child(3) > footer > ul > li:nth-child(1) > a";
+            case "shop":
+                return "[data-footer-link='shop'], body > div:nth-child(3) > footer > ul > li:nth-child(2) > a";
+            case "checkout":
+                return "[data-footer-link='shop'], body > div:nth-child(4) > footer > ul > li:nth-child(3) > a";
+            case "about":
+                return "[data-footer-link='about'], body > div > footer > ul > li:nth-child(4) > a";
+            default:
+                return "a"; // Default selector if no match found
+        }
+    }
+
 }
-
-
