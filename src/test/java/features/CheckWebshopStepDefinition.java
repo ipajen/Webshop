@@ -1,4 +1,4 @@
-/*package features;
+package features;
 
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.BeforeAll;
@@ -45,13 +45,13 @@ public class CheckWebshopStepDefinition {
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
-    @After
+    /*@After
     public void tearDown() {
         // Close the browser if the driver is not null
         if (driver != null) {
             driver.quit();
         }
-    }
+    }*/
 
     // Check the website Title & Heading
     //    Author: Barnali Mohanty
@@ -107,5 +107,5 @@ public class CheckWebshopStepDefinition {
     public static void quitDriver() {
         driver.quit();
     }
-}*/
+}
 
