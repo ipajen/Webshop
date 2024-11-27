@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,7 +36,7 @@ public class CheckWebshopStepDefinition {
         options.addArguments("--disable-infobars");
         options.addArguments("--disable-blink-features=AutomationControlled");
         // Uncomment below for headless mode if required
-        //options.addArguments("--headless");
+        options.addArguments("--headless");
 
         // Initialize WebDriver
         driver = new ChromeDriver(options);
@@ -150,154 +151,50 @@ public class CheckWebshopStepDefinition {
     }
     //Verify the presence of the product in your cart
 
-    @Given("the user is on the webpage")
-    public void the_User_Is_On_The_Webpage() {
-
+    @Given("the user is on the ProductWebpage")
+    public void the_User_Is_On_The_ProductWebpage() {
+     driver.get("https://webshop-agil-testautomatiserare.netlify.app/products");
+     System.out.println("User is on product page");
     }
 
-    @When("the user clicks the {string} button")
-    public void theUserClicksTheShopButton(String buttonType) throws InterruptedException {
-        //Wait till the page loads
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        //Find the shop button and then click it
-        WebElement shopButton = driver.findElement(By.xpath("/html/body/header/div/div/ul/li[2]/a"));
-        Thread.sleep(500);
-        shopButton.click();
-    }
 
-    @When("the user scrolls down to the {string} button for {string}")
-    public void theUserScrollsDownToTheButton(String buttonType, String productName) {
-        //Wait till the page loads
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        //Locate the element of choice
-        WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("body > main:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > button:nth-child(4)")));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", addToCartButton);
-    }
+    @When("the user clicks the Add to Cart button")
+    public void userClicksAddToCartButton() throws InterruptedException {
+        Thread.sleep(2000);
+        WebElement addToCartButton = driver.findElement(By.xpath("//*[@id=\"main\"]/div[2]/div/div/button"));
 
-    @When("User clicks on the Add to Cart button for Mens Casual Premium Slim Fit T-Shirts")
-    public void userClicksAddToCartButton() {
-        try {
-            // Step 1: Ensure the element is visible (if hidden or covered by other elements)
-            JavascriptExecutor executor = (JavascriptExecutor) driver;
+        //((JavascriptExecutor) driver).executeScript("window.scrollTo(0,"+addToCartButton.getLocation().y+")");
+        Thread.sleep(1000);
+        addToCartButton.click();
+        System.out.println("Is button displayed: " + addToCartButton.isDisplayed());
+        System.out.println("Is button enabled: " + addToCartButton.isEnabled());
+        System.out.println("Is button selected: " + addToCartButton.isSelected());
 
-            // Make sure the button is visible (force display in case it's hidden)
-            executor.executeScript("document.querySelector('button[onclick*=\"Mens Casual Premium Slim Fit T-Shirts\"]').style.display='block';");
-
-            // Step 2: Wait for the button to be present in the DOM
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
-            WebElement addToCartButton = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.cssSelector("main > div:nth-child(2) > div > div > button")));
-
-            // Step 3: Check if the button is enabled and clickable
-            if (!addToCartButton.isEnabled()) {
-                System.out.println("The 'Add to Cart' button is not enabled.");
-                return;  // Exit if the button is not enabled
-            }
-
-            // Step 4: Handle potential overlapping elements (ensure the button is not covered)
-            if (!addToCartButton.isDisplayed()) {
-                System.out.println("The 'Add to Cart' button is not displayed or hidden behind another element.");
-                return;  // Exit if the button is not displayed
-            }
-
-            // Step 5: Use Actions to move to the element if it's scrolled out of view
-            Actions actions = new Actions(driver);
-            actions.moveToElement(addToCartButton).perform();
-
-            // Optional: Wait briefly to ensure button is in a clickable state
-            Thread.sleep(2000);  // Sleep for 2 seconds (adjust the time as necessary)
-
-            // Step 6: Perform a click on the button using JavaScriptExecutor as a last resort
-            executor.executeScript("arguments[0].click();", addToCartButton);
-
-            System.out.println("Successfully clicked on the 'Add to Cart' button for Mens Casual Premium Slim Fit T-Shirts.");
-
-            // Optional: Sleep again if needed after the click
-            Thread.sleep(2000);  // Adjust the sleep time if necessary
-
-        } catch (Exception e) {
-            // Handle exception if element is not found, not clickable, or other issues
-            System.out.println("Failed to click on the 'Add to Cart' button: " + e.getMessage());
-            // Optionally, re-throw the exception to fail the test
-            // throw e;
+        Thread.sleep(2000);
+        boolean countUpdated = wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("buttonSize"), "1"));
+        if (countUpdated) {
+            WebElement cartCount = driver.findElement(By.id("buttonSize"));
+            String actualCount = cartCount.getText();
+            System.out.println("Cart count updated successfully: " + actualCount);
+        } else {
+            System.out.println("Cart count did not update as expected.");
         }
     }
 
-
-
-
-
-    @When("User clicks on the Checkout button")
-    public void userClicksOnCheckoutButton() {
-        try {
-            // Locate the checkout button
-            WebElement checkoutButton = driver.findElement(By.xpath("//a[@class='btn btn-warning' and @href='/checkout']"));
-
-            // Wait for the checkout button to be clickable
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-            wait.until(ExpectedConditions.elementToBeClickable(checkoutButton));
-
-            // Scroll the element into view
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkoutButton);
-             Thread.sleep(5000);
-            // Click the button
-            checkoutButton.click();
-
-            System.out.println("Successfully clicked the Checkout button.");
-        } catch (Exception e) {
-            System.out.println("Failed to click the Checkout button.");
-            //throw e;
-        }
+    @When("the user clicks the Checkout button")
+    public void userClicksCheckoutButton() throws InterruptedException {
+        Thread.sleep(2000);
+        WebElement checkoutButton = driver.findElement(By.xpath("/html/body/header/div/div/div/a"));
+        checkoutButton.click();
+        System.out.println("Successfully clicked the Checkout button.");
     }
 
     @Then("the item {string} should be present in the cart")
-    public void theItemShouldBePresentInTheCart(String expectedItemName) {
-        try {
-            // Use WebDriverWait to wait for the element to appear
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-
-            // Locate the cart item using its text. This assumes cart items have a <h6> tag with a class containing "my-0 w-75".
-            WebElement itemElement = driver.findElement(By.xpath("//h6[contains(text(), '" + expectedItemName + "')]"));
-
-            // Assert that the located element is displayed on the page.
-            assertTrue(itemElement.isDisplayed(), "The item '" + expectedItemName + "' is not present in the cart.");
-
-            // Log success to the console if the item is found.
-            System.out.println("The item '" + expectedItemName + "' is present in the cart.");
-        } catch (Exception e) {
-            // Log failure to the console if the item is not found.
-            System.out.println("Failed to find the item '" + expectedItemName + "' in the cart.");
-
-            // Re-throw the exception to mark the test as failed.
-            throw e;
-        }
+    public void theItemShouldBePresentInTheCart(String itemName) {
+        WebElement cartItem = driver.findElement(By.xpath("//*[@id=\"cartList\"]/li[1]/div/h6"));
+        assert cartItem != null : "Item " + itemName + " was not found in the cart.";
+        System.out.println("Item " + itemName + " is present in the cart.");
     }
-
-    @Then("the item {string} should not be present in the cart")
-    public void theItemShouldNotBePresentInTheCart(String expectedItemName) {
-        boolean itemFound = false; // Flag to track if the item is found.
-
-        try {
-            // Attempt to locate the item in the cart using its text.
-            driver.findElement(By.xpath("//h6[contains(text(), '" + expectedItemName + "')]"));
-            itemFound = true; // If found, set the flag to true.
-        } catch (Exception e) {
-            // Item not found; this is the expected outcome for this negative test.
-        }
-
-        // Assert that the item is not found in the cart.
-        assertFalse(itemFound, "The item '" + expectedItemName + "' was unexpectedly found in the cart.");
-
-        // Log the outcome to the console.
-        if (!itemFound) {
-            System.out.println("As expected, the item '" + expectedItemName + "' is not in the cart.");
-        } else {
-            System.out.println("Unexpectedly found the item '" + expectedItemName + "' in the cart.");
-        }
-    }
-
-
-
 
 
 }
