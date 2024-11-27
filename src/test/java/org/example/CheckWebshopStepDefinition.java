@@ -1,3 +1,5 @@
+package org.example;
+
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
