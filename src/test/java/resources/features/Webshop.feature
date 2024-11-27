@@ -22,3 +22,15 @@ Automatic webshop test for the school.
     And User searches for "Gold"
     Then the search results should display items related to "Gold"
     #TODO search with gold and another with press enter.
+
+  Scenario Outline: Verify navigation links
+    Given Webshop is available
+    When the user clicks the following "<Link>" link
+    Then the "<Page>" page should be displayed
+
+    Examples:
+      | Link     | Page    |
+      | Home     | https://webshop-agil-testautomatiserare.netlify.app/   |
+      | Shop     | https://webshop-agil-testautomatiserare.netlify.app/products   |
+      | Checkout | https://webshop-agil-testautomatiserare.netlify.app/checkout |
+      | About    | https://webshop-agil-testautomatiserare.netlify.app/# |
