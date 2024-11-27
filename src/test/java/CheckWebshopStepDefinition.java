@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -185,6 +186,56 @@ public class CheckWebshopStepDefinition {
 
 
     }
+    //Verify the error message ,when there is no input in the checkout form
+    //Barnali Mohanty
+
+    @Given("the user is on the checkout page at {string}")
+    public void the_user_is_on_the_checkout_page(String url) {
+        driver.get("https://webshop-agil-testautomatiserare.netlify.app/checkout");
+    }
+    @When("the user clicks the {string} button without filling required fields")
+    public void the_user_clicks_the_button_without_filling_required_fields(String buttonLabel) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Locate the button using XPath
+        WebElement checkoutButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='" + buttonLabel + "']")));
+
+        // Scroll to the button using JavaScriptExecutor
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", checkoutButton);
+
+        // Wait for the button to be clickable
+        wait.until(ExpectedConditions.elementToBeClickable(checkoutButton));
+
+        // Click the button using JavaScriptExecutor
+        js.executeScript("arguments[0].click();", checkoutButton);
+    }
+
+    @Then("the error messages for required fields should be displayed")
+    public void the_error_messages_for_required_fields_should_be_displayed() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+            // First Name error
+            WebElement firstNameError = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/main/div[2]/div[2]/form/div[1]/div[1]/div")));
+            assertTrue(firstNameError.isDisplayed(), "First name error message is  displayed");
+
+            // Last Name error
+            WebElement lastNameError = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/main/div[2]/div[2]/form/div[1]/div[2]/div")));
+            assertTrue(lastNameError.isDisplayed(), "Last name error message is  displayed");
+
+            // Email error
+            WebElement emailError = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/main/div[2]/div[2]/form/div[1]/div[3]/div")));
+            assertTrue(emailError.isDisplayed(), "Email error message is  displayed");
+
+            System.out.println("All error messages are displayed as expected!");
+        } catch (AssertionError e) {
+            System.err.println("Assertion failed: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
 
     // Check the website Title & Heading
     //    Author: Barnali Mohanty

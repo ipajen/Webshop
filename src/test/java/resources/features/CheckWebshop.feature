@@ -23,6 +23,11 @@ Feature: Webshop Test
     Then the language should be "sv"
     And the content should appear in English
 
+  Scenario: Display error messages when required fields are left empty
+    Given the user is on the checkout page at "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    When the user clicks the "Continue to checkout" button without filling required fields
+    Then the error messages for required fields should be displayed
+
   Scenario: Check website title
     Given User is on the Webpage
     When User checks the title
