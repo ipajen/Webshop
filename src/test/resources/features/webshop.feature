@@ -1,5 +1,5 @@
-Feature: Webshop Test
-Automatic webshop test for the school.
+Feature: Webshop
+ Automatic webshop test for the school.
 
   Scenario: Verify that the website copyright text displays correctly
     Given Webshop is available

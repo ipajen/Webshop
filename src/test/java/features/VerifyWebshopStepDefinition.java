@@ -1,4 +1,4 @@
-package org.example;
+/*package org.example;
 
 import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.Given;
@@ -50,4 +50,4 @@ public class VerifyWebshopStepDefinition {
         driver.quit();
     }
 
-}
+}*/

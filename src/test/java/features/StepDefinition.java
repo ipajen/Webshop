@@ -1,9 +1,10 @@
-package org.example;
+package features;
 
+import io.cucumber.java.AfterAll;
+import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.BeforeAll;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,20 +21,18 @@ import javax.net.ssl.HttpsURLConnection;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 
 public class StepDefinition {
 
     private static WebDriver driver;
 
     @BeforeAll
-    public static void createDriver()
-    {
+    public static void createDriver() {
         ChromeOptions option = new ChromeOptions();
         option.addArguments("--remote-allow-origin=*");
         option.addArguments("incognito");
@@ -46,17 +45,24 @@ public class StepDefinition {
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
+    @Given("Webshop is available")
+    public void webshopIsAvailable() {
+    }
+
+    @When("User visits webshop-agil-testautomatiserare.netlify.app")
+    public void userVisitsWebshopAgilTestautomatiserareNetlifyApp() {
+    }
+
     //Verify that the website copyright text displays correctly
     //Author: Jarko Piironen
     @Then("the copyright text should be {string}")
-
     public void theCopyrightTextShouldBe(String expectedCopyrightText) {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         WebElement websiteCopyright = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.cssSelector("  body > div:nth-child(3) > footer > p"))
         );
-      
+
         // Get the text from the copyright element
         String websiteCopyrightText = websiteCopyright.getText();
         System.out.println(" - Copyright text: " + websiteCopyrightText);
@@ -64,44 +70,35 @@ public class StepDefinition {
         assertEquals(expectedCopyrightText, websiteCopyrightText);
     }
 
-    @Given("Webshop is available")
-    public void webshopIsAvailable() {
-    }
-
-
-    @When("User visits webshop-agil-testautomatiserare.netlify.app")
-    public void userVisitsWebshopAgilTestautomatiserareNetlifyApp() {
-    }
-
     //Verify that there are no uncaught syntax errors in the browser console logs
     @Then("the console logs should not contain errors")
     //Author: Jarko Piironen
     public void theConsoleLogsShouldNotContainErrors() {
-            LogEntries logs = driver.manage().logs().get(LogType.BROWSER);
-            boolean syntaxErrorFound = false;
-            List<LogEntry> Alllogs = logs.getAll();
-            for (LogEntry entry : Alllogs) {
-                System.out.println(driver + " Console Error test " + entry.getMessage());
-                if (entry.getMessage().contains("Uncaught SyntaxError")) {
-                    syntaxErrorFound = true;
+        LogEntries logs = driver.manage().logs().get(LogType.BROWSER);
+        boolean syntaxErrorFound = false;
+        List<LogEntry> Alllogs = logs.getAll();
+        for (LogEntry entry : Alllogs) {
+            System.out.println(driver + " Console Error test " + entry.getMessage());
+            if (entry.getMessage().contains("Uncaught SyntaxError")) {
+                syntaxErrorFound = true;
 
-                }
             }
-        assertTrue(!syntaxErrorFound, "Test failed: Uncaught SyntaxError found in JavaScript logs.");
         }
+        assertTrue(!syntaxErrorFound, "Test failed: Uncaught SyntaxError found in JavaScript logs.");
+    }
 
     //Validate SSL certificate
     //Author: Jarko Piironen
     @Then("the SSL certificate should be valid and not expiring in {int} days")
     public void theSSLCertificateShouldBeValidAndNotExpiringInDays(int minDays) {
         try {
-        String siteUrl = "https://webshop-agil-testautomatiserare.netlify.app";
-        URL url = new URL(siteUrl);
+            String siteUrl = "https://webshop-agil-testautomatiserare.netlify.app";
+            URL url = new URL(siteUrl);
 
-        // Get the SSL certificate and check its validity
+            // Get the SSL certificate and check its validity
 
-        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-        connection.connect();
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+            connection.connect();
 
             // Retrieve the SSL certificate
             X509Certificate cert = (X509Certificate) connection.getServerCertificates()[0];
@@ -110,13 +107,14 @@ public class StepDefinition {
             long daysRemaining = (expiryDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
 
             // Check if the certificate is valid and has more than 30 days before expiry
-        assertTrue(daysRemaining > minDays, "SSL Certificate is expiring in less than " + minDays + " days!");
-        System.out.println("SSL Certificate is valid and expires in " + daysRemaining + " days.");
-    } catch (Exception e) {
-        e.printStackTrace();
-        Assertions.fail("Failed to retrieve SSL certificate: " + e.getMessage());
+            assertTrue(daysRemaining > minDays, "SSL Certificate is expiring in less than " + minDays + " days!");
+            System.out.println("SSL Certificate is valid and expires in " + daysRemaining + " days.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail("Failed to retrieve SSL certificate: " + e.getMessage());
         }
     }
+
 }
 
 

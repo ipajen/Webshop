@@ -1,7 +1,7 @@
-package org.example;
+/*package features;
 
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
+import io.cucumber.java.AfterAll;
+import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -14,7 +14,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CheckWebshopStepDefinition {
 
@@ -23,7 +24,7 @@ public class CheckWebshopStepDefinition {
 
     private WebElement imgElement;
 
-    @Before
+    @BeforeAll
     public static void createDriver() {
         // Setup ChromeDriver options
         ChromeOptions options = new ChromeOptions();
@@ -33,7 +34,7 @@ public class CheckWebshopStepDefinition {
         options.addArguments("--disable-infobars");
         options.addArguments("--disable-blink-features=AutomationControlled");
         // Uncomment below for headless mode if required
-         options.addArguments("--headless");
+        options.addArguments("--headless");
 
         // Initialize WebDriver
         driver = new ChromeDriver(options);
@@ -83,7 +84,7 @@ public class CheckWebshopStepDefinition {
 
         // Print and assert the `height`
         System.out.println("Image height: " + actualHeight);
-        assertEquals(expectedHeight,actualHeight,"The height matches");
+        assertEquals(expectedHeight, actualHeight, "The height matches");
     }
 
     @Then("the image should have an alt text")
@@ -101,5 +102,10 @@ public class CheckWebshopStepDefinition {
             System.out.println("The image alt text is: " + altText);
         }
     }
-}
+
+    @AfterAll
+    public static void quitDriver() {
+        driver.quit();
+    }
+}*/
 
