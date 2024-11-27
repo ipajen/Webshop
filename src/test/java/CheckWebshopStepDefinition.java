@@ -264,6 +264,35 @@ public class CheckWebshopStepDefinition {
         // Validate the text of the heading
         assertEquals(expectedHeadingText, heading.getText(), "Page heading does  match the expected value.");
     }
+
+    // Check the main text on the webpage "This shop is all you need" exist
+    //    Author: Barnali Mohanty
+
+    @Given("User Is on the WebPage")
+    public void userIsOnTheWebPage() {
+    }
+
+    @When("User checks the main heading")
+    public void userChecksTheMainHeading() {
+        // Placeholder: Action will be verified in the next step
+    }
+
+    @Then("the main heading should be {string}")
+    public void theMainHeadingShouldBe(String expectedHeading) {
+        // Locate the element
+        WebElement heading = driver.findElement(By.cssSelector("h2.display-4.fw-bold.lh-1"));
+
+        // Get the text of the element
+        String actualHeading = heading.getText();
+
+        // Print the heading text
+        System.out.println("The main heading text is: " + actualHeading);
+
+
+        // Assert the text matches the expected value
+        assertEquals(expectedHeading, actualHeading, "The main heading text does  match the expected value.");
+    }
+
 }
 
 
