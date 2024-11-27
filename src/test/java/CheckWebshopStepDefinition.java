@@ -237,5 +237,34 @@ public class CheckWebshopStepDefinition {
     }
 
 
+    // Check the website Title & Heading
+    //    Author: Barnali Mohanty
+
+    @Given("User is on the Webpage")
+    public void user_is_on_the_webpage() {
+    }
+
+    @When("User checks the title")
+    public void userChecksTheTitle() {
+        // Placeholder step for checking the title,No need of code
+    }
+
+    @Then("the title should be {string}")
+    public void theTitleOfThePageShouldBe(String expectedTitle) {
+        // Get the title of the current page
+        String actualTitle = driver.getTitle();
+        assertEquals(expectedTitle, actualTitle, "Page title does  match the expected value.");
+    }
+
+    @Then("the heading should be {string}")
+    public void theHeadingShouldBe(String expectedHeadingText) {
+        // Locate the main heading using a CSS selector
+        WebElement heading = driver.findElement(By.cssSelector("body > header > div > div > a > h1"));
+
+        // Validate the text of the heading
+        assertEquals(expectedHeadingText, heading.getText(), "Page heading does  match the expected value.");
+    }
 }
+
+
 

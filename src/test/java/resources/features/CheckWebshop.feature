@@ -27,3 +27,9 @@ Feature: Webshop Test
     Given the user is on the checkout page at "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     When the user clicks the "Continue to checkout" button without filling required fields
     Then the error messages for required fields should be displayed
+
+  Scenario: Check website title
+    Given User is on the Webpage
+    When User checks the title
+    Then the title should be "Webbutiken"
+    And the heading should be "🛍️ The Shop"
