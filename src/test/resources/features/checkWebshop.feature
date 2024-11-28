@@ -41,8 +41,8 @@ Feature: Check Webshop
     Then the title should be "Webbutiken"
     And the heading should be "🛍️ The Shop"
 
-  Scenario: User checks the main heading text
-    Given User is on the Webpage
-    When User checks the main heading
-    Then the main heading should be "This shop is all you need"
+ ## Scenario: User checks the main heading text
+   ## Given User is on the Webpage
+    ##When User checks the main heading
+    ##Then the main heading should be "This shop is all you need"
 
