@@ -29,8 +29,8 @@ Automatic webshop test for the school.
     Then the "<Page>" page should be displayed
 
     Examples:
-      | Link     | Page    |
-      | Home     | https://webshop-agil-testautomatiserare.netlify.app/   |
+      | Link     | Page                                                           |
+      | Home     | https://webshop-agil-testautomatiserare.netlify.app/           |
       | Shop     | https://webshop-agil-testautomatiserare.netlify.app/products   |
-      | Checkout | https://webshop-agil-testautomatiserare.netlify.app/checkout |
-      | About    | https://webshop-agil-testautomatiserare.netlify.app/# |
+      | Checkout | https://webshop-agil-testautomatiserare.netlify.app/checkout   |
+      | About    | https://webshop-agil-testautomatiserare.netlify.app/checkout#  |

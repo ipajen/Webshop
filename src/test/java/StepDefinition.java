@@ -195,13 +195,14 @@ public class StepDefinition {
 
     }
 
-    //Verify navigation links
-    //Author: Jarko Piironen
+    // Verify navigation links
+// Author: Jarko Piironen
     @When("the user clicks the following {string} link")
     public void theUserClicksTheFollowingLink(String linkText) {
         String selector = getLinkSelector(linkText);
 
         try {
+            Thread.sleep(1000);
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
             WebElement linkElement;
 
@@ -215,24 +216,25 @@ public class StepDefinition {
                 linkElement = wait.until(ExpectedConditions.elementToBeClickable(By.linkText(linkText)));
             }
 
-            // Scroll into view with additional adjustments
+            // Scroll into view and ensure the element is clickable
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", linkElement);
-
-            // Adjust scroll position if necessary
+            Thread.sleep(500); // Let the page stabilize after scrolling
             ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -100);"); // Offset for sticky headers
-            Thread.sleep(500); // Small wait to let the page stabilize
 
-            // Ensure the element is clickable and attempt to click
-            wait.until(ExpectedConditions.elementToBeClickable(linkElement)).click();
-            System.out.println("Clicked on the link: " + linkText);
+            // Retry clicking with JavaScript if necessary
+            try {
+                linkElement.click();
+                System.out.println("Clicked on the link: " + linkText);
+            } catch (ElementClickInterceptedException ex) {
+                System.out.println("Element click intercepted. Attempting JavaScript click.");
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", linkElement);
+            }
 
         } catch (Exception e) {
             System.out.println("Failed to click the link: " + linkText + " using selector: " + selector + ". Error: " + e.getMessage());
             Assertions.fail("Could not click the link: " + linkText);
         }
     }
-
-
 
     @Then("the {string} page should be displayed")
     public void thePageShouldBeDisplayed(String page) {
@@ -250,12 +252,11 @@ public class StepDefinition {
             case "shop":
                 return "[data-footer-link='shop'], body > div:nth-child(3) > footer > ul > li:nth-child(2) > a";
             case "checkout":
-                return "[data-footer-link='shop'], body > div:nth-child(4) > footer > ul > li:nth-child(3) > a";
+                return "[data-footer-link='checkout'], body > div:nth-child(4) > footer > ul > li:nth-child(3) > a";
             case "about":
-                return "[data-footer-link='about'], body > div > footer > ul > li:nth-child(4) > a";
+                return "[data-footer-link='about'], body > div:nth-child(3) > footer > ul > li:nth-child(4) > a";
             default:
                 return "a"; // Default selector if no match found
         }
     }
-
 }
