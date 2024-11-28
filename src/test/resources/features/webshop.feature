@@ -16,3 +16,35 @@ Feature: Webshop
     When User visits webshop-agil-testautomatiserare.netlify.app
     Then the SSL certificate should be valid and not expiring in 60 days
 
+  Scenario: Validate Search Functionality
+    Given Webshop is available
+    When User visits the products page at "webshop-agil-testautomatiserare.netlify.app/products"
+    And User searches for "Gold"
+    Then the search results should display items related to "Gold"
+    #TODO search with gold and another with press enter.
+
+Scenario Outline: Verify navigation links
+    Given Webshop is available
+    When the user clicks the following "<Link>" link
+    Then the "<Page>" page should be displayed
+
+    Examples:
+      | Link     | Page                                                           |
+      | Home     | https://webshop-agil-testautomatiserare.netlify.app/           |
+      | Shop     | https://webshop-agil-testautomatiserare.netlify.app/products   |
+      | Checkout | https://webshop-agil-testautomatiserare.netlify.app/checkout   |
+      | About    | https://webshop-agil-testautomatiserare.netlify.app/checkout#  |
+
+Scenario Outline: Validate Filter Functionality
+    Given Webshop is available
+    When User visits the products page at "webshop-agil-testautomatiserare.netlify.app/products"
+    When the user clicks on "<filter>"
+    Then the user verifies that the "<filter>" loads its respective products
+
+    Examples:
+      | filter            |
+      | All               |
+      | Men's clothing    |
+      | Women's clothing  |
+      | Jewelery          |
+      | Electronics       |
