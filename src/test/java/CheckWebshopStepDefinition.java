@@ -3,16 +3,19 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +36,7 @@ public class CheckWebshopStepDefinition {
         options.addArguments("--disable-infobars");
         options.addArguments("--disable-blink-features=AutomationControlled");
         // Uncomment below for headless mode if required
-         options.addArguments("--headless");
+        options.addArguments("--headless");
 
         // Initialize WebDriver
         driver = new ChromeDriver(options);
@@ -83,7 +86,7 @@ public class CheckWebshopStepDefinition {
 
         // Print and assert the `height`
         System.out.println("Image height: " + actualHeight);
-        assertEquals(expectedHeight,actualHeight,"The height matches");
+        assertEquals(expectedHeight, actualHeight, "The height matches");
     }
 
     @Then("the image should have an alt text")
@@ -101,11 +104,13 @@ public class CheckWebshopStepDefinition {
             System.out.println("The image alt text is: " + altText);
         }
     }
+
     //  verify Billing and Payment headings on check out page
     @Given("the user is on the webshop homepage")
-    public void theUserIsOnTheWebshopHomepage() {
+    public void theUserIsOnTheHomepage() {
 
     }
+
     @When("the user scrolls down to the {string} link")
     public void theUserScrollsDownToTheLink(String linkText) {
         // Locate the element by its link text
@@ -123,6 +128,7 @@ public class CheckWebshopStepDefinition {
         WebElement element = driver.findElement(By.linkText(linkText));
         element.click();
     }
+
     @When("the user scrolls down to the {string} heading")
     public void theUserScrollsDownToTheHeading(String headingText) {
         //Wait till the page loads
@@ -133,6 +139,7 @@ public class CheckWebshopStepDefinition {
         // Scroll into view
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", headingElement);
     }
+
     @Then("the {string} heading text should be {string}")
     public void theHeadingTextShouldBe(String headingType, String expectedText) {
         // Locate the heading element by its text
@@ -141,6 +148,56 @@ public class CheckWebshopStepDefinition {
         // Verify the text
         String actualText = headingElement.getText();
         assertEquals(expectedText, actualText, headingType + " heading text does not match.");
+    }
+    //Verify the presence of the product in your cart
+
+    @Given("the user is on the ProductWebpage")
+    public void the_User_Is_On_The_ProductWebpage() {
+     driver.get("https://webshop-agil-testautomatiserare.netlify.app/products");
+     System.out.println("User is on product page");
+    }
+
+
+    @When("the user clicks the Add to Cart button")
+    public void userClicksAddToCartButton() throws InterruptedException {
+        Thread.sleep(2000);
+        WebElement addToCartButton = driver.findElement(By.xpath("//*[@id=\"main\"]/div[2]/div/div/button"));
+
+        //Add time for the page to load properly
+
+        Thread.sleep(1000);
+        addToCartButton.click();
+        //Just debugging
+        System.out.println("Is button displayed: " + addToCartButton.isDisplayed());
+        System.out.println("Is button enabled: " + addToCartButton.isEnabled());
+        System.out.println("Is button selected: " + addToCartButton.isSelected());
+
+        Thread.sleep(2000);
+        // See if the cart is updated ,when you click the add to cart button
+        boolean countUpdated = wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("buttonSize"), "1"));
+        if (countUpdated) {
+            WebElement cartCount = driver.findElement(By.id("buttonSize"));
+            String actualCount = cartCount.getText();
+            System.out.println("Cart count updated successfully: " + actualCount);
+        } else {
+            System.out.println("Cart count did not update as expected.");
+        }
+    }
+
+    @When("the user clicks the Checkout button")
+    public void userClicksCheckoutButton() throws InterruptedException {
+        Thread.sleep(2000);
+        WebElement checkoutButton = driver.findElement(By.xpath("/html/body/header/div/div/div/a"));
+        checkoutButton.click();
+        System.out.println("Successfully clicked the Checkout button.");
+    }
+
+    @Then("the item {string} should be present in the cart")
+    public void theItemShouldBePresentInTheCart(String itemName) {
+        WebElement cartItem = driver.findElement(By.xpath("//*[@id=\"cartList\"]/li[1]/div/h6"));
+        //Assert that the item is present
+        assert cartItem != null : "Item " + itemName + " was not found in the cart.";
+        System.out.println("Item " + itemName + " is present in the cart.");
     }
 
     @Given("I open the web page {string}")

@@ -17,6 +17,13 @@ Feature: Webshop Test
     And the user scrolls down to the "Payment" heading
     Then the "Payment" heading text should be "Payment"
 
+
+  Scenario: Verify items in the cart
+   Given the user is on the ProductWebpage
+    When the user clicks the Add to Cart button
+    And the user clicks the Checkout button
+    Then the item "Mens Casual Premium Slim Fit T-Shirts" should be present in the cart
+
   Scenario: Check if the declared language and content language match
     Given I open the web page "https://webshop-agil-testautomatiserare.netlify.app/"
     When I check the "lang" attribute of the "html" tag
@@ -38,3 +45,4 @@ Feature: Webshop Test
     Given User is on the Webpage
     When User checks the main heading
     Then the main heading should be "This shop is all you need"
+
