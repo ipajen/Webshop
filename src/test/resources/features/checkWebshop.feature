@@ -1,5 +1,5 @@
-Feature: Webshop Test
- Automatic webshop test for the school.
+Feature: Check Webshop
+  Automatic webshop test for the school.
 
   Scenario: Verify the image element on the webpage
     Given Webshop.Netify is available

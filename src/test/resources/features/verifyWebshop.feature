@@ -3,6 +3,6 @@
 
   ##Scenario: Verify that the Shop link works
     ##Given User visits "https://webshop-agil-testautomatiserare.netlify.app"
-    ##When User clicks "/products"
+    ##When User clicks "https://webshop-agil-testautomatiserare.netlify.app/products"
     ##Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app/products"
 

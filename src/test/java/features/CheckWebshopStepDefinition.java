@@ -45,14 +45,6 @@ public class CheckWebshopStepDefinition {
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
-    /*@After
-    public void tearDown() {
-        // Close the browser if the driver is not null
-        if (driver != null) {
-            driver.quit();
-        }
-    }*/
-
     // Check the website Title & Heading
     //    Author: Barnali Mohanty
 
@@ -104,8 +96,11 @@ public class CheckWebshopStepDefinition {
     }
 
     @AfterAll
-    public static void quitDriver() {
-        driver.quit();
+    public static void tearDown() {
+        // Close the browser if the driver is not null
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }
 

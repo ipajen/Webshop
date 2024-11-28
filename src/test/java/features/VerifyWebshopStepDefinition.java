@@ -1,5 +1,6 @@
 package features;
 
+import io.cucumber.java.AfterAll;
 import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -19,8 +20,7 @@ public class VerifyWebshopStepDefinition {
     private static WebDriver driver;
 
     @BeforeAll
-    public static void createDriver()
-    {
+    public static void createDriver() {
         ChromeOptions option = new ChromeOptions();
         option.addArguments("--no-sandbox");
         option.addArguments("--disable-dev-shm-usage");
@@ -39,7 +39,7 @@ public class VerifyWebshopStepDefinition {
 
     @When("User clicks {string}")
     public void userClicks(String shopLink) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.linkText(shopLink))).click();
     }
@@ -47,6 +47,10 @@ public class VerifyWebshopStepDefinition {
     @Then("The current url should be {string}")
     public void theCurrentUrlShouldBe(String expectedUrl) {
         assertEquals(expectedUrl, driver.getCurrentUrl());
+    }
+
+    @AfterAll
+    public static void quitDriver() {
         driver.quit();
     }
 
