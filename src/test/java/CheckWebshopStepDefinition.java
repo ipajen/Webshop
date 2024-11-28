@@ -163,14 +163,17 @@ public class CheckWebshopStepDefinition {
         Thread.sleep(2000);
         WebElement addToCartButton = driver.findElement(By.xpath("//*[@id=\"main\"]/div[2]/div/div/button"));
 
-        //((JavascriptExecutor) driver).executeScript("window.scrollTo(0,"+addToCartButton.getLocation().y+")");
+        //Add time for the page to load properly
+
         Thread.sleep(1000);
         addToCartButton.click();
+        //Just debugging
         System.out.println("Is button displayed: " + addToCartButton.isDisplayed());
         System.out.println("Is button enabled: " + addToCartButton.isEnabled());
         System.out.println("Is button selected: " + addToCartButton.isSelected());
 
         Thread.sleep(2000);
+        // See if the cart is updated ,when you click the add to cart button
         boolean countUpdated = wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("buttonSize"), "1"));
         if (countUpdated) {
             WebElement cartCount = driver.findElement(By.id("buttonSize"));
@@ -192,6 +195,7 @@ public class CheckWebshopStepDefinition {
     @Then("the item {string} should be present in the cart")
     public void theItemShouldBePresentInTheCart(String itemName) {
         WebElement cartItem = driver.findElement(By.xpath("//*[@id=\"cartList\"]/li[1]/div/h6"));
+        //Assert that the item is present
         assert cartItem != null : "Item " + itemName + " was not found in the cart.";
         System.out.println("Item " + itemName + " is present in the cart.");
     }
