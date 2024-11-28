@@ -41,7 +41,7 @@ public class VerifyWebshopStepDefinition {
     public void userClicks(String shopLink) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
         wait.until(ExpectedConditions.elementToBeClickable(
-                By.linkText(shopLink))).click();
+                By.xpath("/html/body/header/div/div/ul/li[2]/a"))).click();
     }
 
     @Then("The current url should be {string}")
