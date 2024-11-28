@@ -260,9 +260,12 @@ public class StepDefinition {
                 return "[data-footer-link='about'], body > div:nth-child(3) > footer > ul > li:nth-child(4) > a";
             default:
                 return "a"; // Default selector if no match found
-
+        }
+    }
     //Validate Filter Functionality
     //Author: Jarko Piironen
+
+
 
     @When("the user clicks on {string}")
     public void theUserClicksOn(String filter) throws InterruptedException {
