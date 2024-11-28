@@ -4,10 +4,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.BeforeAll;
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -42,7 +40,7 @@ public class StepDefinition {
         option.addArguments("-start-maximized");
         option.addArguments("--disable-infobars");
         option.addArguments("--disable-blink-features=AutomationControlled");
-        //option.addArguments("--headless");
+        option.addArguments("--headless");
 
         driver = new ChromeDriver(option);
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
@@ -127,6 +125,7 @@ public class StepDefinition {
         try {
             // Wait for the "Products" link to be clickable
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
             WebElement productsLink = wait.until(
                     ExpectedConditions.elementToBeClickable(By.cssSelector("header > div > div > ul > li:nth-child(2) > a"))
             );
@@ -203,7 +202,8 @@ public class StepDefinition {
     //Author: Jarko Piironen
 
     @When("the user clicks on {string}")
-    public void theUserClicksOn(String filter) {
+    public void theUserClicksOn(String filter) throws InterruptedException {
+        Thread.sleep(1000);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         String cssSelector;
 
@@ -232,52 +232,22 @@ public class StepDefinition {
             // Wait for the element to be clickable
             WebElement filterElement = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(cssSelector)));
             filterElement.click();
+            Thread.sleep(1000);
         } catch (Exception e) {
             // Fail the test explicitly if the element cannot be clicked
             Assert.fail("Failed to click on the filter: " + filter + ". Error: " + e.getMessage());
         }
     }
 
-    @Test
-    public void tryMyTest() throws InterruptedException {
-        ChromeOptions option = new ChromeOptions();
-        option.addArguments("--remote-allow-origin=*");
-        option.addArguments("incognito");
-        option.addArguments("-start-maximized");
-        option.addArguments("--disable-infobars");
-        option.addArguments("--disable-blink-features=AutomationControlled");
-        //option.addArguments("--headless");
-
-        driver = new ChromeDriver(option);
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app/products");
-        Thread.sleep(1000);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-       // WebElement filterElement = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("body > div.container.mt-5 > div > ul > li:nth-child(2) > a")));
-        WebElement filterElement = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("body > div.container.mt-5 > div > ul > li:nth-child(1) > a")));
-        filterElement.click();
-        Thread.sleep(1000);
-
-        WebElement mainElement = driver.findElement(By.id("main"));
-        List<WebElement> divsUnderMain = mainElement.findElements(By.cssSelector("div"));
-        System.out.println(divsUnderMain);
-
-    }
-
     @Then("the user verifies that the {string} loads its respective products")
     public void theUserVerifiesThatTheLoadsItsRespectiveProducts(String filter) {
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        boolean isMainVisible = false;
-
-        try {
+       try {
             // Try waiting for the 'main' element to become visible
-            WebElement mainElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("main")));
-            isMainVisible = true; // Mark 'main' as visible
+            WebElement mainElement = driver.findElement(By.id("main"));
 
             // Retrieve all div elements under the 'main' element
             List<WebElement> divsUnderMain = mainElement.findElements(By.cssSelector("div"));
-            System.out.println("divs under main WITHOUT all" + divsUnderMain);
+            System.out.println("divs under main WITHOUT all: " + divsUnderMain);
 
             if (filter.equals("All")) {
                 // For the "All" filter, verify that at least one div under 'main' has the 'col' class
@@ -292,32 +262,22 @@ public class StepDefinition {
                     }
                 }
                 Assert.assertTrue("No div with class 'col' found under 'All' filter", colClassExists);
-            }
-
-            else {
+            } else {
                 // For other filters, ensure that no div under 'main' has the 'col' class
+                List<WebElement> divsUnderMain2 = mainElement.findElements(By.cssSelector("div"));
+                System.out.println("divs under main: " + divsUnderMain2);
+                Assert.assertTrue("No divs under 'main' displayed under filter '" + filter + "'", divsUnderMain2.isEmpty());
 
-                List<WebElement> divsUnderMain1 = mainElement.findElements(By.cssSelector("div"));
-                System.out.println("divs under main" + divsUnderMain1);
-                Assert.assertFalse("No divs under 'main' displayed under filter '" + filter + "'", divsUnderMain.isEmpty());
-
-                for (WebElement div : divsUnderMain) {
+                for (WebElement div : divsUnderMain2) {
                     String classAttribute = div.getAttribute("class");
                     System.out.println("Found class for div: " + classAttribute); // Log the class attribute
                     Assert.assertFalse("Div under filter '" + filter + "' should not have class 'col'", "col".equals(classAttribute));
                 }
             }
-        } catch (TimeoutException e) {
-            // If 'main' is not visible and the filter is not "All", this is allowed
-            if (!filter.equals("All")) {
-                System.out.println("'main' element is not visible, but this is allowed for filter: " + filter);
-            } else {
-                // For the "All" filter, it is mandatory for 'main' to be visible
-                Assert.fail("'main' element is not visible for filter: " + filter);
-            }
-        } finally {
-            // Use isMainVisible for logging or additional verification
-            System.out.println("Main element visibility status: " + isMainVisible);
+        } catch (Exception e) {
+            // Handle any exception that might occur
+            System.out.println("An error occurred: " + e.getMessage());
+            throw e;
         }
     }
 }
