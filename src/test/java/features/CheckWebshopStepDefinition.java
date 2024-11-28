@@ -6,16 +6,17 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CheckWebshopStepDefinition {
 
@@ -95,7 +96,7 @@ public class CheckWebshopStepDefinition {
         }
     }
 
-      //  verify Billing and Payment headings on check out page
+    //  verify Billing and Payment headings on check out page
     @Given("the user is on the webshop homepage")
     public void theUserIsOnTheHomepage() {
 
@@ -143,8 +144,8 @@ public class CheckWebshopStepDefinition {
 
     @Given("the user is on the ProductWebpage")
     public void the_User_Is_On_The_ProductWebpage() {
-     driver.get("https://webshop-agil-testautomatiserare.netlify.app/products");
-     System.out.println("User is on product page");
+        driver.get("https://webshop-agil-testautomatiserare.netlify.app/products");
+        System.out.println("User is on product page");
     }
 
     @When("the user clicks the Add to Cart button")
@@ -193,7 +194,7 @@ public class CheckWebshopStepDefinition {
     public void i_open_the_web_page(String url) {
 
     }
-    
+
     @When("I check the {string} attribute of the {string} tag")
     public void i_check_the_attribute_of_the_tag(String attribute, String tagName) {
         // Find the <html> element and get the 'lang' attribute
@@ -203,15 +204,15 @@ public class CheckWebshopStepDefinition {
         // Store the result for later verification
         System.setProperty("langValue", langValue);
     }
-    
+
     @Then("the language should be {string}")
     public void the_language_should_be(String expectedLanguage) {
 
-            // Retrieve the stored attribute value
-            String actualLanguage = System.getProperty("langValue");
-            assertEquals(expectedLanguage, actualLanguage);
+        // Retrieve the stored attribute value
+        String actualLanguage = System.getProperty("langValue");
+        assertEquals(expectedLanguage, actualLanguage);
 
-        }
+    }
 
     @Then("the content should appear in English")
     public void the_content_should_appear_in_english() {
@@ -229,7 +230,7 @@ public class CheckWebshopStepDefinition {
             System.err.println("The content does NOT appear to be in English.");
         }
     }
-    
+
     //Verify the error message ,when there is no input in the checkout form
     //Barnali Mohanty
 
@@ -237,6 +238,7 @@ public class CheckWebshopStepDefinition {
     public void the_user_is_on_the_checkout_page(String url) {
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/checkout");
     }
+
     @When("the user clicks the {string} button without filling required fields")
     public void the_user_clicks_the_button_without_filling_required_fields(String buttonLabel) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
