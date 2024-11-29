@@ -41,7 +41,7 @@ Feature: Check Webshop
     Then the title should be "Webbutiken"
     And the heading should be "🛍️ The Shop"
   
-  Scenario: User checks the main heading text
+  Scenario: User checks the lead text
     Given User is on the Webpage
-    When User checks the main heading
-    Then the main heading should be "This shop is all you need"
+    When User checks the lead text
+    Then the lead text should be "Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins."
