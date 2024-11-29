@@ -325,7 +325,7 @@ public class CheckWebshopStepDefinition {
     @Then("the lead text should be {string}")
     public void theLeadTextShouldBe(String expectedLeadText) {
         // Locate the element
-        WebElement actualLeadText = driver.findElement(By.className("lead")).getText();
+        String actualLeadText = driver.findElement(By.className("lead")).getText();
 
         // Print the lead text
         System.out.println("The lead text is: " + actualLeadText);
