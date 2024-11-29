@@ -20,4 +20,8 @@ Feature: Verify Webshop
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/products"
     When User clicks Home link
     Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app/"
+  
+  Scenario: Verify that the Products button has the text "All products"
+    Given User visits "https://webshop-agil-testautomatiserare.netlify.app"
+    Then The button text should be "All products"
 
