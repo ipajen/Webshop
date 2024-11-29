@@ -30,7 +30,7 @@ Feature: Webshop
     Examples:
       | Link     | Page                                                           |
       | Home     | https://webshop-agil-testautomatiserare.netlify.app/           |
-      ##| Shop     | https://webshop-agil-testautomatiserare.netlify.app/products   |
+      | Shop     | https://webshop-agil-testautomatiserare.netlify.app/products   |
       | Checkout | https://webshop-agil-testautomatiserare.netlify.app/checkout   |
       | About    | https://webshop-agil-testautomatiserare.netlify.app/checkout#  |
   
