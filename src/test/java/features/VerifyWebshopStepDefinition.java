@@ -30,18 +30,42 @@ public class VerifyWebshopStepDefinition {
         driver = new ChromeDriver(option);
     }
 
-    //Verify that the Shop link works
     //Author: Ingela Bladh
     @Given("User visits {string}")
     public void userVisits(String webshopUrl) {
         driver.get(webshopUrl);
     }
 
-    @When("User clicks {string}")
-    public void userClicks(String shopLink) {
+    //Verify that the Shop link works
+    @When("User clicks Shop link")
+    public void userClicksShopLink() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("/html/body/header/div/div/ul/li[2]/a"))).click();
+    }
+
+    //Verify that the Checkout button works
+    @When("User clicks Checkout button")
+    public void userClicksCheckoutButton() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("/html/body/header/div/div/div/a"))).click();
+    }
+
+    //Verify that the Home image link works
+    @When("User clicks Home image link")
+    public void userClicksHomeImageLink() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("/html/body/header/div/div/a"))).click();
+    }
+
+    //Verify that the Home link works
+    @When("User clicks Home link")
+    public void userClicksHomeLink() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("/html/body/header/div/div/ul/li[1]/a"))).click();
     }
 
     @Then("The current url should be {string}")
