@@ -29,20 +29,19 @@ Feature: Check Webshop
     When I check the "lang" attribute of the "html" tag
     Then the language should be "sv"
     And the content should appear in English
-
+  
   Scenario: Display error messages when required fields are left empty
     Given the user is on the checkout page at "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     When the user clicks the "Continue to checkout" button without filling required fields
     Then the error messages for required fields should be displayed
-
+  
   Scenario: Check website title
     Given User is on the Webpage
     When User checks the title
     Then the title should be "Webbutiken"
     And the heading should be "🛍️ The Shop"
-
- ## Scenario: User checks the main heading text
-   ## Given User is on the Webpage
-    ##When User checks the main heading
-    ##Then the main heading should be "This shop is all you need"
-
+  
+  Scenario: User checks the main heading text
+    Given User is on the Webpage
+    When User checks the main heading
+    Then the main heading should be "This shop is all you need"
