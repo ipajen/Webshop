@@ -30,13 +30,13 @@ public class VerifyWebshopStepDefinition {
         driver = new ChromeDriver(option);
     }
 
-    //Author: Ingela Bladh
+    // Author: Ingela Bladh
     @Given("User visits {string}")
     public void userVisits(String webshopUrl) {
         driver.get(webshopUrl);
     }
 
-    //Verify that the Shop link works
+    // Verify that the Shop link works
     @When("User clicks Shop link")
     public void userClicksShopLink() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
@@ -44,7 +44,7 @@ public class VerifyWebshopStepDefinition {
                 By.xpath("/html/body/header/div/div/ul/li[2]/a"))).click();
     }
 
-    //Verify that the Checkout button works
+    // Verify that the Checkout button works
     @When("User clicks Checkout button")
     public void userClicksCheckoutButton() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
@@ -52,7 +52,7 @@ public class VerifyWebshopStepDefinition {
                 By.xpath("/html/body/header/div/div/div/a"))).click();
     }
 
-    //Verify that the Home image link works
+    // Verify that the Home image link works
     @When("User clicks Home image link")
     public void userClicksHomeImageLink() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
@@ -60,7 +60,7 @@ public class VerifyWebshopStepDefinition {
                 By.xpath("/html/body/header/div/div/a"))).click();
     }
 
-    //Verify that the Home link works
+    // Verify that the Home link works
     @When("User clicks Home link")
     public void userClicksHomeLink() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
@@ -72,6 +72,16 @@ public class VerifyWebshopStepDefinition {
     public void theCurrentUrlShouldBe(String expectedUrl) {
         assertEquals(expectedUrl, driver.getCurrentUrl());
     }
+
+    // Verify that the Products button has the text "All products"
+    @Then("The button text should be {string}")
+    public void theButtonTextShouldBe(String expectedButtonText) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        String actualButtonText = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("body > div.container.my-5 > div > div.col-lg-7.p-3.p-lg-5.pt-lg-3 > div > button"))).getText();
+        assertEquals(expectedButtonText, actualButtonText);
+    }
+
 
     @AfterAll
     public static void quitDriver() {
