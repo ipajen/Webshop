@@ -322,21 +322,16 @@ public class CheckWebshopStepDefinition {
         // Placeholder: Action will be verified in the next step
     }
 
-    @Then("the main heading should be {string}")
-    public void theMainHeadingShouldBe(String expectedHeading) {
+    @Then("the lead text be {string}")
+    public void theLeadTextShouldBe(String expectedLeadText) {
         // Locate the element
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        WebElement heading = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("body > div.container.my-5 > div > div.col-lg-7.p-3.p-lg-5.pt-lg-3 > h2")));
+        WebElement actualLeadText = driver.findElement(By.className("lead"));
 
-        // Get the text of the element
-        String actualHeading = heading.getText();
-
-        // Print the heading text
-        System.out.println("The main heading text is: " + actualHeading);
+        // Print the lead text
+        System.out.println("The lead text is: " + leadText);
 
         // Assert the text matches the expected value
-        assertEquals(expectedHeading, actualHeading, "The main heading text does match the expected value.");
+        assertEquals(expectedLeadText, actualLeadText, "The lead text does match the expected value.");
     }
 
     @AfterAll
