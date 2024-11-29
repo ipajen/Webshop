@@ -26,24 +26,23 @@ Feature: Webshop
     Given Webshop is available
     When the user clicks the following "<Link>" link
     Then the "<Page>" page should be displayed
-
+  
     Examples:
       | Link     | Page                                                           |
       | Home     | https://webshop-agil-testautomatiserare.netlify.app/           |
       ##| Shop     | https://webshop-agil-testautomatiserare.netlify.app/products   |
       | Checkout | https://webshop-agil-testautomatiserare.netlify.app/checkout   |
       | About    | https://webshop-agil-testautomatiserare.netlify.app/checkout#  |
-
-##Scenario Outline: Validate Filter Functionality
-  ##  Given Webshop is available
-    ##When User visits the products page at "webshop-agil-testautomatiserare.netlify.app/products"
-    ##When the user clicks on "<filter>"
-    ##Then the user verifies that the "<filter>" loads its respective products
-
-    ##Examples:
-     ## | filter            |
-     ## | All               |
-     ## | Men's clothing    |
-     ## | Women's clothing  |
-     ## | Jewelery          |
-     ## | Electronics       |
+  
+  Scenario Outline: Validate Filter Functionality
+    Given User visits the products page at "https://webshop-agil-testautomatiserare.netlify.app/products"
+    When the user clicks on "<filter>"
+    Then the user verifies that the "<filter>" loads its respective products
+    
+    Examples:
+      | filter            |
+      | All               |
+      | Men's clothing    |
+      | Women's clothing  |
+      | Jewelery          |
+      | Electronics       |
