@@ -328,7 +328,7 @@ public class CheckWebshopStepDefinition {
         WebElement actualLeadText = driver.findElement(By.className("lead"));
 
         // Print the lead text
-        System.out.println("The lead text is: " + leadText);
+        System.out.println("The lead text is: " + actualLeadText);
 
         // Assert the text matches the expected value
         assertEquals(expectedLeadText, actualLeadText, "The lead text does match the expected value.");
