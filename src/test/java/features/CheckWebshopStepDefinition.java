@@ -313,25 +313,29 @@ public class CheckWebshopStepDefinition {
     // Check the lead text on the Homepage exists
     //    Author: Barnali Mohanty
 
-    @Given("User Is on the WebPage")
-    public void userIsOnTheWebPage() {
+    @Given("User is on the Home page")
+    public void userIsOnTheHomePage() {
+        driver.get("https://webshop-agil-testautomatiserare.netlify.app");
     }
 
-    @When("User checks the lead text")
-    public void userChecksTheLeadText() {
+    @When("User checks the main heading")
+    public void userChecksTheMainHeading() {
         // Placeholder: Action will be verified in the next step
     }
 
-    @Then("the lead text should be {string}")
-    public void theLeadTextShouldBe(String expectedLeadText) {
+    @Then("the main heading should be {string}")
+    public void theMainHeadingShouldBe(String expectedHeading) {
         // Locate the element
-        String actualLeadText = driver.findElement(By.className("lead")).getText();
-
-        // Print the lead text
-        System.out.println("The lead text is: " + actualLeadText);
+        WebElement heading = driver.findElement(By.cssSelector("h2.display-4.fw-bold.lh-1"));
+        
+        // Get the text of the element
+        String actualHeading = heading.getText();
+        
+        // Print the heading text
+        System.out.println("The main heading text is: " + actualHeading);
 
         // Assert the text matches the expected value
-        assertEquals(expectedLeadText, actualLeadText, "The lead text does match the expected value.");
+        assertEquals(expectedHeading, actualHeading, "The main heading does match the expected value.");
     }
 
     @AfterAll
