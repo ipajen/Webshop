@@ -325,7 +325,7 @@ public class CheckWebshopStepDefinition {
     @Then("the main heading should be {string}")
     public void theMainHeadingShouldBe(String expectedHeading) {
         // Locate the element
-        WebElement heading = driver.findElement(By.xPath("/html/body/div[1]/div/div[1]/h2"));
+        WebElement heading = driver.findElement(By.xpath("/html/body/div[1]/div/div[1]/h2"));
 
         // Get the text of the element
         String actualHeading = heading.getText();
