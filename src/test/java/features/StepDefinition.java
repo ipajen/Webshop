@@ -115,26 +115,12 @@ public class StepDefinition {
 
     // Validate Search Functionality
     // Author: Jarko Piironen
-    @When("User visits the products page at {string}")
+    @Given("User visits the products page at {string}")
     public void userVisitsTheProductsPageAt(String productsUrl) {
-        try {
-            // Wait for the "Products" link to be clickable
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-
-            WebElement productsLink = wait.until(
-                    ExpectedConditions.elementToBeClickable(By.cssSelector("header > div > div > ul > li:nth-child(2) > a"))
-            );
-
-            // Click the "Products" link
-            productsLink.click();
-            System.out.println("Clicked on the Products link from the homepage successfully.");
-        } catch (Exception e) {
-            System.out.println("Failed to click on the Products link: " + e.getMessage());
-            Assertions.fail("Test failed because the 'Products' link could not be clicked.");
-        }
+        driver.get(productsUrl);
     }
 
-    @And("User searches for {string}")
+    @When("User searches for {string}")
     public void userSearchesFor(String searchQuery) {
         try {
             // Wait for the specific element containing the expected product name to be visible
