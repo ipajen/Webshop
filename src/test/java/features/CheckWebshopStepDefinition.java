@@ -327,7 +327,7 @@ public class CheckWebshopStepDefinition {
         // Locate the element
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
         WebElement heading = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/header/div/div/a")));
+                By.xpath("/html/body/div[1]/div/div[1]/h2")));
 
         // Get the text of the element
         String actualHeading = heading.getText();
@@ -336,7 +336,7 @@ public class CheckWebshopStepDefinition {
         System.out.println("The main heading text is: " + actualHeading);
 
         // Assert the text matches the expected value
-        assertEquals(expectedHeading, actualHeading, "The main heading text does  match the expected value.");
+        assertEquals(expectedHeading, actualHeading, "The main heading text does match the expected value.");
     }
 
     @AfterAll
