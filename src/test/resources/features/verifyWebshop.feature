@@ -14,10 +14,10 @@ Feature: Verify Webshop
   Scenario: Verify that the Home image link works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/products"
     When User clicks Home image link
-    Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app"
+    Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app/"
 
   Scenario: Verify that the Home link works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/products"
     When User clicks Home link
-    Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app"
+    Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app/"
 
