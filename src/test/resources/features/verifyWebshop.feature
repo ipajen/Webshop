@@ -3,7 +3,7 @@ Feature: Verify Webshop
 
   Scenario: Verify that the Shop link works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app"
-    When User clicks Shop Link
+    When User clicks Shop link
     Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app/products"
 
   Scenario: Verify that the Checkout button works
