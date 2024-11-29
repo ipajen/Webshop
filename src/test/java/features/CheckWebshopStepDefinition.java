@@ -310,19 +310,19 @@ public class CheckWebshopStepDefinition {
         assertEquals(expectedHeadingText, heading.getText(), "Page heading does  match the expected value.");
     }
 
-    // Check the main text on the webpage "This shop is all you need" exist
+    // Check the lead text on the Homepage exists
     //    Author: Barnali Mohanty
 
     @Given("User Is on the WebPage")
     public void userIsOnTheWebPage() {
     }
 
-    @When("User checks the main heading")
-    public void userChecksTheMainHeading() {
+    @When("User checks the lead text")
+    public void userChecksTheLeadText() {
         // Placeholder: Action will be verified in the next step
     }
 
-    @Then("the lead text be {string}")
+    @Then("the lead text should be {string}")
     public void theLeadTextShouldBe(String expectedLeadText) {
         // Locate the element
         WebElement actualLeadText = driver.findElement(By.className("lead"));
