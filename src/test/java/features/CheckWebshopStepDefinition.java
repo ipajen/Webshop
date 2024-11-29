@@ -310,7 +310,7 @@ public class CheckWebshopStepDefinition {
         assertEquals(expectedHeadingText, heading.getText(), "Page heading does  match the expected value.");
     }
 
-    // Check the lead text on the Homepage exists
+    // Check the main text on the webpage "This shop is all you need" exists
     //    Author: Barnali Mohanty
 
     @Given("User is on the Home page")
