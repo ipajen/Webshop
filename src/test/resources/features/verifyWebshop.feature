@@ -28,8 +28,8 @@ Feature: Verify Webshop
   Scenario: Verify that the Remove button works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/products"
     And User clicks Add to cart button
-    And User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    And User clicks Checkout button
     When User clicks Remove button
-    Then Your cart list should be empty
+    Then Your cart list should only contain Total
 
 
