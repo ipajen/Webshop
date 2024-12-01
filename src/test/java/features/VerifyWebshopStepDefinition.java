@@ -189,7 +189,7 @@ public class VerifyWebshopStepDefinition {
         WebDriverWait wait = createWebDriverWait();
         WebElement form = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.tagName("form")));
-        assertEquals(expectedClasses, form.getDomProperty("class"));
+        assertEquals(expectedClasses, form.getAttribute("class"));
     }
 
     // Author: Ingela Bladh
