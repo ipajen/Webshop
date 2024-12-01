@@ -183,6 +183,15 @@ public class VerifyWebshopStepDefinition {
         assertEquals(3, list.size());
     }
 
+    // Verify the Continue to checkout button works
+    @Then("The form tag should have the classes {string}")
+    public void theFormTagShouldHaveTheClasses(String expectedClasses) {
+        WebDriverWait wait = createWebDriverWait();
+        WebElement form = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.tagName("form")));
+        assertEquals(expectedClasses, form.getDomProperty("class"));
+    }
+
     // Author: Ingela Bladh
     private void clickElement(String cssSelector) {
         WebDriverWait wait = createWebDriverWait();
