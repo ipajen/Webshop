@@ -20,11 +20,11 @@ Feature: Verify Webshop
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/products"
     When User clicks Home link
     Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app/"
-  
+
   Scenario: Verify that the Products button has the text "All products"
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app"
     Then The button text should be "All products"
-  
+
   Scenario: Verify that the Remove button works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/products"
     And User clicks Add to cart button
@@ -35,5 +35,17 @@ Feature: Verify Webshop
   Scenario: Verify product has image, title, price, description and Add to cart button
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/products"
     Then Product should have all elements
+
+  Scenario: Verify email form field validation - Wrong
+    Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    And User fills in email field with "test.email.com"
+    And User clicks Continue to checkout button
+    Then An error message should be displayed
+
+  Scenario: Verify email form field validation - Correct
+    Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    And User fills in email field with "test@email.com"
+    And User clicks Continue to checkout button
+    Then A check mark should be displayed
 
 
