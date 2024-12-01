@@ -172,6 +172,17 @@ public class VerifyWebshopStepDefinition {
         assertNotNull(mark);
     }
 
+    // Verify there are three payment radio buttons
+    // Author: Ingela Bladh
+    @Then("There should be three payment radio buttons")
+    public void thereShouldBeThreeRadioButtons() {
+        WebDriverWait wait = createWebDriverWait();
+        List<WebElement> list = wait.until(ExpectedConditions.presenceOfElementLocated(
+                        By.cssSelector(" body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.my-3")))
+                .findElements(By.className("form-check"));
+        assertEquals(3, list.size());
+    }
+
     // Author: Ingela Bladh
     private void clickElement(String cssSelector) {
         WebDriverWait wait = createWebDriverWait();
