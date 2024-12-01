@@ -147,7 +147,9 @@ public class VerifyWebshopStepDefinition {
     // Author: Ingela Bladh
     @And("User clicks Continue to checkout button")
     public void userClicksContinueToCheckoutButton() {
-        clickElement("body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > button");
+        WebDriverWait wait = createWebDriverWait();
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > button"))).submit();
     }
 
     // Wrong email
