@@ -114,7 +114,7 @@ public class VerifyWebshopStepDefinition {
         WebDriverWait wait = createWebDriverWait();
 
         List<WebElement> list = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.id("id"))).findElements(By.className("col"));
+                By.id("main"))).findElements(By.className("col"));
 
         for (WebElement card : list) {
             // Image
