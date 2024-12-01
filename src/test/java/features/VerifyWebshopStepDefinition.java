@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class VerifyWebshopStepDefinition {
     private static WebDriver driver;
@@ -103,6 +104,34 @@ public class VerifyWebshopStepDefinition {
         List<WebElement> cartList = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.id("cartList"))).findElements(By.tagName("li"));
         assertEquals(1, cartList.size());
+    }
+
+    // Verify product has all elements
+    // Author: Ingela Bladh
+    @Then("Product should have all elements")
+    public void productShouldHaveAllElements() {
+
+        WebDriverWait wait = createWebDriverWait();
+
+        List<WebElement> list = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.id("id"))).findElements(By.className("col"));
+
+        for (WebElement card : list) {
+            // Image
+            assertNotNull(card.findElement(By.tagName("img")));
+
+            WebElement cardBody = card.findElement(By.className("card-body"));
+            assertNotNull(cardBody);
+
+            // Title
+            assertNotNull(cardBody.findElement(By.tagName("h3")));
+            // Price
+            assertNotNull(cardBody.findElement(By.className("fs-5")).findElement(By.tagName("strong")));
+            // Description
+            assertNotNull(cardBody.findElement(By.className("card-text")));
+            // Add to cart button
+            assertNotNull(cardBody.findElement(By.tagName("button")));
+        }
     }
 
     // Author: Ingela Bladh
