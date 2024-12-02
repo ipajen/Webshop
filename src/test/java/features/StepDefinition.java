@@ -1,9 +1,10 @@
+package features;
+
+import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.BeforeAll;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -18,20 +19,18 @@ import javax.net.ssl.HttpsURLConnection;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 
 public class StepDefinition {
 
     static WebDriver driver;
 
     @BeforeAll
-    public static void createDriver()
-    {
+    public static void createDriver() {
         ChromeOptions option = new ChromeOptions();
         option.addArguments("--remote-allow-origin=*");
         option.addArguments("incognito");
@@ -44,17 +43,24 @@ public class StepDefinition {
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
+    @Given("Webshop is available")
+    public void webshopIsAvailable() {
+    }
+
+    @When("User visits webshop-agil-testautomatiserare.netlify.app")
+    public void userVisitsWebshopAgilTestautomatiserareNetlifyApp() {
+    }
+
     //Verify that the website copyright text displays correctly
     //Author: Jarko Piironen
     @Then("the copyright text should be {string}")
-
     public void theCopyrightTextShouldBe(String expectedCopyrightText) {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         WebElement websiteCopyright = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.cssSelector("  body > div:nth-child(3) > footer > p"))
         );
-      
+
         // Get the text from the copyright element
         String websiteCopyrightText = websiteCopyright.getText();
         System.out.println(" - Copyright text: " + websiteCopyrightText);
@@ -62,44 +68,35 @@ public class StepDefinition {
         assertEquals(expectedCopyrightText, websiteCopyrightText);
     }
 
-    @Given("Webshop is available")
-    public void webshopIsAvailable() {
-    }
-
-
-    @When("User visits webshop-agil-testautomatiserare.netlify.app")
-    public void userVisitsWebshopAgilTestautomatiserareNetlifyApp() {
-    }
-
     //Verify that there are no uncaught syntax errors in the browser console logs
     @Then("the console logs should not contain errors")
     //Author: Jarko Piironen
     public void theConsoleLogsShouldNotContainErrors() {
-            LogEntries logs = driver.manage().logs().get(LogType.BROWSER);
-            boolean syntaxErrorFound = false;
-            List<LogEntry> Alllogs = logs.getAll();
-            for (LogEntry entry : Alllogs) {
-                System.out.println(driver + " Console Error test " + entry.getMessage());
-                if (entry.getMessage().contains("Uncaught SyntaxError")) {
-                    syntaxErrorFound = true;
+        LogEntries logs = driver.manage().logs().get(LogType.BROWSER);
+        boolean syntaxErrorFound = false;
+        List<LogEntry> Alllogs = logs.getAll();
+        for (LogEntry entry : Alllogs) {
+            System.out.println(driver + " Console Error test " + entry.getMessage());
+            if (entry.getMessage().contains("Uncaught SyntaxError")) {
+                syntaxErrorFound = true;
 
-                }
             }
-        assertTrue(!syntaxErrorFound, "Test failed: Uncaught SyntaxError found in JavaScript logs.");
         }
+        assertTrue(!syntaxErrorFound, "Test failed: Uncaught SyntaxError found in JavaScript logs.");
+    }
 
     //Validate SSL certificate
     //Author: Jarko Piironen
     @Then("the SSL certificate should be valid and not expiring in {int} days")
     public void theSSLCertificateShouldBeValidAndNotExpiringInDays(int minDays) {
         try {
-        String siteUrl = "https://webshop-agil-testautomatiserare.netlify.app";
-        URL url = new URL(siteUrl);
+            String siteUrl = "https://webshop-agil-testautomatiserare.netlify.app";
+            URL url = new URL(siteUrl);
 
-        // Get the SSL certificate and check its validity
+            // Get the SSL certificate and check its validity
 
-        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-        connection.connect();
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+            connection.connect();
 
             // Retrieve the SSL certificate
             X509Certificate cert = (X509Certificate) connection.getServerCertificates()[0];
@@ -107,37 +104,23 @@ public class StepDefinition {
             Date currentDate = new Date();
             long daysRemaining = (expiryDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
 
-     // Check if the certificate is valid and has more than 30 days before expiry
-        assertTrue(daysRemaining > minDays, "SSL Certificate is expiring in less than " + minDays + " days!");
-        System.out.println("SSL Certificate is valid and expires in " + daysRemaining + " days.");
-    } catch (Exception e) {
-        e.printStackTrace();
-        Assertions.fail("Failed to retrieve SSL certificate: " + e.getMessage());
+            // Check if the certificate is valid and has more than 30 days before expiry
+            assertTrue(daysRemaining > minDays, "SSL Certificate is expiring in less than " + minDays + " days!");
+            System.out.println("SSL Certificate is valid and expires in " + daysRemaining + " days.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail("Failed to retrieve SSL certificate: " + e.getMessage());
         }
     }
 
     // Validate Search Functionality
     // Author: Jarko Piironen
-    @When("User visits the products page at {string}")
+    @Given("User visits the products page at {string}")
     public void userVisitsTheProductsPageAt(String productsUrl) {
-        try {
-            // Wait for the "Products" link to be clickable
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-
-            WebElement productsLink = wait.until(
-                    ExpectedConditions.elementToBeClickable(By.cssSelector("header > div > div > ul > li:nth-child(2) > a"))
-            );
-
-            // Click the "Products" link
-            productsLink.click();
-            System.out.println("Clicked on the Products link from the homepage successfully.");
-        } catch (Exception e) {
-            System.out.println("Failed to click on the Products link: " + e.getMessage());
-            Assertions.fail("Test failed because the 'Products' link could not be clicked.");
-        }
+        driver.get(productsUrl);
     }
 
-    @And("User searches for {string}")
+    @When("User searches for {string}")
     public void userSearchesFor(String searchQuery) {
         try {
             // Wait for the specific element containing the expected product name to be visible
@@ -194,9 +177,7 @@ public class StepDefinition {
             System.out.println("Failed to validate search results: " + e.getMessage());
             Assertions.fail("Test failed because the expected search result was not found.");
         }
-
     }
-
 
     // Verify navigation links
     // Author: Jarko Piironen
@@ -262,11 +243,9 @@ public class StepDefinition {
                 return "a"; // Default selector if no match found
         }
     }
+
     //Validate Filter Functionality
     //Author: Jarko Piironen
-
-
-
     @When("the user clicks on {string}")
     public void theUserClicksOn(String filter) throws InterruptedException {
         Thread.sleep(1000);
@@ -301,13 +280,13 @@ public class StepDefinition {
             Thread.sleep(1000);
         } catch (Exception e) {
             // Fail the test explicitly if the element cannot be clicked
-            Assert.fail("Failed to click on the filter: " + filter + ". Error: " + e.getMessage());
+            Assertions.fail("Failed to click on the filter: " + filter + ". Error: " + e.getMessage());
         }
     }
 
     @Then("the user verifies that the {string} loads its respective products")
     public void theUserVerifiesThatTheLoadsItsRespectiveProducts(String filter) {
-       try {
+        try {
             // Try waiting for the 'main' element to become visible
             WebElement mainElement = driver.findElement(By.id("main"));
 
@@ -317,7 +296,7 @@ public class StepDefinition {
 
             if (filter.equals("All")) {
                 // For the "All" filter, verify that at least one div under 'main' has the 'col' class
-                Assert.assertFalse("No divs under 'main' with 'col' class displayed under 'All' filter", divsUnderMain.isEmpty());
+                Assertions.assertFalse(divsUnderMain.isEmpty(), "No divs under 'main' with 'col' class displayed under 'All' filter");
 
                 boolean colClassExists = false;
                 for (WebElement div : divsUnderMain) {
@@ -327,17 +306,17 @@ public class StepDefinition {
                         colClassExists = true;
                     }
                 }
-                Assert.assertTrue("No div with class 'col' found under 'All' filter", colClassExists);
+                Assertions.assertTrue(colClassExists, "No div with class 'col' found under 'All' filter");
             } else {
                 // For other filters, ensure that no div under 'main' has the 'col' class
                 List<WebElement> divsUnderMain2 = mainElement.findElements(By.cssSelector("div"));
                 System.out.println("divs under main: " + divsUnderMain2);
-                Assert.assertTrue("No divs under 'main' displayed under filter '" + filter + "'", divsUnderMain2.isEmpty());
+                Assertions.assertTrue(divsUnderMain2.isEmpty(), "No divs under 'main' displayed under filter '" + filter + "'");
 
                 for (WebElement div : divsUnderMain2) {
                     String classAttribute = div.getAttribute("class");
                     System.out.println("Found class for div: " + classAttribute); // Log the class attribute
-                    Assert.assertFalse("Div under filter '" + filter + "' should not have class 'col'", "col".equals(classAttribute));
+                    Assertions.assertFalse("col".equals(classAttribute), "Div under filter '" + filter + "' should not have class 'col'");
                 }
             }
         } catch (Exception e) {
