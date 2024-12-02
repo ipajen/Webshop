@@ -52,4 +52,9 @@ Feature: Verify Webshop
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     Then There should be three payment radio buttons
 
+  Scenario: Verify the Continue to checkout button works
+    Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    And User clicks Continue to checkout button
+    Then The form tag should have the classes "needs-validation was-validated"
+
 
