@@ -134,6 +134,64 @@ public class VerifyWebshopStepDefinition {
         }
     }
 
+    // Verify email form field validation
+
+    // Author: Ingela Bladh
+    @And("User fills in email field with {string}")
+    public void userFillsInEmailFieldWith(String email) {
+        WebDriverWait wait = createWebDriverWait();
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.id("email"))).sendKeys(email);
+    }
+
+    // Author: Ingela Bladh
+    @And("User clicks Continue to checkout button")
+    public void userClicksContinueToCheckoutButton() {
+        WebDriverWait wait = createWebDriverWait();
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > button"))).submit();
+    }
+
+    // Wrong email
+    // Author: Ingela Bladh
+    @Then("An error message should be displayed")
+    public void anErrorMessageShouldBeDisplayed() {
+        WebDriverWait wait = createWebDriverWait();
+        String actualErrorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(
+                "body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.row.g-3 > div:nth-child(3) > div.invalid-feedback"))).getText();
+        assertEquals("Please enter a valid email address for shipping updates.", actualErrorMessage);
+    }
+
+    // Correct email
+    // Author: Ingela Bladh
+    @Then("A check mark should be displayed")
+    public void aCheckMarkShouldBeDisplayed() {
+        WebDriverWait wait = createWebDriverWait();
+        WebElement mark = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(
+                "body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.row.g-3 > div:nth-child(3) > div:nth-child(3)")));
+        assertNotNull(mark);
+    }
+
+    // Verify there are three payment radio buttons
+    // Author: Ingela Bladh
+    @Then("There should be three payment radio buttons")
+    public void thereShouldBeThreeRadioButtons() {
+        WebDriverWait wait = createWebDriverWait();
+        List<WebElement> list = wait.until(ExpectedConditions.presenceOfElementLocated(
+                        By.cssSelector(" body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.my-3")))
+                .findElements(By.className("form-check"));
+        assertEquals(3, list.size());
+    }
+
+    // Verify the Continue to checkout button works
+    @Then("The form tag should have the classes {string}")
+    public void theFormTagShouldHaveTheClasses(String expectedClasses) {
+        WebDriverWait wait = createWebDriverWait();
+        WebElement form = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.tagName("form")));
+        assertEquals(expectedClasses, form.getAttribute("class"));
+    }
+
     // Author: Ingela Bladh
     private void clickElement(String cssSelector) {
         WebDriverWait wait = createWebDriverWait();
