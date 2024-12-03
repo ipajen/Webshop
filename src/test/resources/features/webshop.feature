@@ -32,7 +32,7 @@ Feature: Webshop
       | Home     | https://webshop-agil-testautomatiserare.netlify.app/           |
       | Shop     | https://webshop-agil-testautomatiserare.netlify.app/products   |
       | Checkout | https://webshop-agil-testautomatiserare.netlify.app/checkout   |
-      | About    | https://webshop-agil-testautomatiserare.netlify.app/checkout#  |
+      | About    | https://webshop-agil-testautomatiserare.netlify.app/about      |
   
   Scenario Outline: Validate Filter Functionality
     Given User visits the products page at "https://webshop-agil-testautomatiserare.netlify.app/products"

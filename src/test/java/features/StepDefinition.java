@@ -236,9 +236,9 @@ public class StepDefinition {
             case "shop":
                 return "[data-footer-link='shop'], body > div:nth-child(3) > footer > ul > li:nth-child(2) > a";
             case "checkout":
-                return "[data-footer-link='checkout'], body > div:nth-child(4) > footer > ul > li:nth-child(3) > a";
+                return "[data-footer-link='checkout'], body > div:nth-child(3) > footer > ul > li:nth-child(4) > a";
             case "about":
-                return "[data-footer-link='about'], body > div:nth-child(3) > footer > ul > li:nth-child(4) > a";
+                return "[data-footer-link='about'], body > div:nth-child(3) > footer > ul > li:nth-child(3) > a";
             default:
                 return "a"; // Default selector if no match found
         }
