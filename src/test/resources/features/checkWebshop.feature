@@ -38,7 +38,7 @@ Feature: Check Webshop
   Scenario: Check website title
     Given User is on the Webpage
     When User checks the title
-    Then the title should be "Webbutiken"
+    Then the title should be "The Shop"
     And the heading should be "🛍️ The Shop"
   
   Scenario: User checks the main heading text
