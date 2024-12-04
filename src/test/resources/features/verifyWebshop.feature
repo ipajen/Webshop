@@ -24,7 +24,7 @@ Feature: Verify Webshop
   Scenario: Verify that the "All products" button leads to Products page
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app"
     When User clicks All products button
-    Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app/products"
+    Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app/products.html"
 
   Scenario: Verify that the Remove button works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/products"
