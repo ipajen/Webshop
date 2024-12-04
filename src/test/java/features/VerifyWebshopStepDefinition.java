@@ -74,14 +74,11 @@ public class VerifyWebshopStepDefinition {
         assertEquals(expectedUrl, driver.getCurrentUrl());
     }
 
-    // Verify that the Products button has the text "All products"
+    // Verify that the "All products" button leads to the Products page
     // Author: Ingela Bladh
-    @Then("The button text should be {string}")
-    public void theButtonTextShouldBe(String expectedButtonText) {
-        WebDriverWait wait = createWebDriverWait();
-        String actualButtonText = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.cssSelector("body > div.container.my-5 > div > div.col-lg-7.p-3.p-lg-5.pt-lg-3 > div > button"))).getText();
-        assertEquals(expectedButtonText, actualButtonText);
+    @When("User clicks All products button")
+    public void userClicksAllProductsButton() {
+        clickElement("body > div.container.my-5 > div > div.col-lg-7.p-3.p-lg-5.pt-lg-3 > div > button");
     }
 
     // Verify that the Remove button works
