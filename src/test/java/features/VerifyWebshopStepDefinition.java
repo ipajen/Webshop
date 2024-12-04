@@ -81,11 +81,18 @@ public class VerifyWebshopStepDefinition {
         assertEquals(expectedUrl, driver.getCurrentUrl());
     }
 
-    // Verify that the "All products" button leads to the Products page
+    // Verify that the "All products" button on Homepage leads to the Products page
     // Author: Ingela Bladh
     @When("User clicks All products button")
     public void userClicksAllProductsButton() {
         clickElement("body > div.container.my-5 > div > div.col-lg-7.p-3.p-lg-5.pt-lg-3 > div > button");
+    }
+
+    // Verify that the "To all products" button on About page leads to the Products page
+    // Author: Ingela Bladh
+    @When("User clicks To all products button")
+    public void userClicksToAllProductsButton() {
+        clickElement("body > div.container.my-5 > div > div > button");
     }
 
     // Verify that the Remove button works
