@@ -183,15 +183,19 @@ public class VerifyWebshopStepDefinition {
         assertNotNull(mark);
     }
 
-    // Verify there are three payment radio buttons
+    // Verify the PayPal radio button works
     // Author: Ingela Bladh
-    @Then("There should be three payment radio buttons")
-    public void thereShouldBeThreeRadioButtons() {
+    @And("User selects PayPal radio button")
+    public void userSelectsPayPalRadioButton() {
         WebDriverWait wait = createWebDriverWait();
-        List<WebElement> list = wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.cssSelector(" body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.my-3")))
-                .findElements(By.className("form-check"));
-        assertEquals(3, list.size());
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/main/div[2]/div[2]/form/div[2]/div[3]/input"))).click();
+    }
+
+    @Then("The page should display {string}")
+    public void thePageShouldDisplay(String expectedText) {
+        WebDriverWait wait = createWebDriverWait();
+        String actualText = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#paypalInfo > p > i"))).getText();
+        assertEquals(expectedText, actualText);
     }
 
     // Verify the Continue to checkout button works

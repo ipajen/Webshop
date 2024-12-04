@@ -59,9 +59,10 @@ Feature: Verify Webshop
     And User clicks Continue to checkout button
     Then A check mark should be displayed
 
-  Scenario: Verify there are three payment radio buttons
+  Scenario: Verify the PayPal radio button works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
-    Then There should be three payment radio buttons
+    And User selects PayPal radio button
+    Then The page should display "You will be redirected to PayPal in the next step."
 
   Scenario: Verify the Continue to checkout button works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
