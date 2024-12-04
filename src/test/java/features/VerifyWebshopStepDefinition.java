@@ -47,6 +47,13 @@ public class VerifyWebshopStepDefinition {
         clickElement("body > header > div > div > ul > li:nth-child(2) > a");
     }
 
+    // Verify that the About link works
+    // Author: Ingela Bladh
+    @When("User clicks About link")
+    public void userClicksAboutLink() {
+        clickElement("body > header > div > div > ul > li:nth-child(3) > a");
+    }
+
     // Verify that the Checkout button works
     // Author: Ingela Bladh
     @When("User clicks Checkout button")
