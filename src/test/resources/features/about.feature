@@ -3,9 +3,9 @@ Feature: Webshop - About
 
   ## Author: Ingela Bladh
   Scenario: Verify that the "To all products" button on About page leads to Products page
-    Given User visits "https://webshop-agil-testautomatiserare.netlify.app/about"
+    Given User navigates to "https://webshop-agil-testautomatiserare.netlify.app/about"
     When User clicks To all products button
-    Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app/products.html"
+    Then The url should be "https://webshop-agil-testautomatiserare.netlify.app/products.html"
 
 
 

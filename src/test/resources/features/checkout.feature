@@ -11,42 +11,42 @@ Feature: Webshop - Checkout
     And the user scrolls down to the "Payment" heading
     Then the "Payment" heading text should be "Payment"
 
-## Author: Barnali Mohanty
+  ## Author: Barnali Mohanty
   Scenario: Verify items in the cart
     Given the user is on the ProductWebpage
     When the user clicks the Add to Cart button
     And the user clicks the Checkout button
     Then the item "Mens Casual Premium Slim Fit T-Shirts" should be present in the cart
 
-    ## Author: Barnali Mohanty
+  ## Author: Barnali Mohanty
   Scenario: Display error messages when required fields are left empty
     Given the user is on the checkout page at "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     When the user clicks the "Continue to checkout" button without filling required fields
     Then the error messages for required fields should be displayed
 
-    ## Author: Ingela Bladh
+  ## Author: Ingela Bladh
   Scenario: Verify that the Remove button works
-    Given User visits "https://webshop-agil-testautomatiserare.netlify.app/products"
+    Given User visits the page "https://webshop-agil-testautomatiserare.netlify.app/products"
     And User clicks the Add to cart button
-    And User clicks Checkout button
+    And User clicks The Checkout button
     When User clicks Remove button
-    Then Your cart list should only contain Total
+    Then One Item should have been removed from your cart list
 
-    ## Author: Ingela Bladh
+  ## Author: Ingela Bladh
   Scenario: Verify email form field validation - Wrong
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User fills in email field with "test.email.com"
     And User clicks Continue to checkout button
     Then The page should show "Please enter a valid email address for shipping updates."
 
-    ## Author: Ingela Bladh
+  ## Author: Ingela Bladh
   Scenario: Verify email form field validation - Correct
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User fills in email field with "test@email.com"
     And User clicks Continue to checkout button
     Then A check mark should be displayed
 
-    ## Author: Ingela Bladh
+  ## Author: Ingela Bladh
   Scenario: Verify the payment radio buttons work
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User selects PayPal radio button
@@ -60,7 +60,7 @@ Feature: Webshop - Checkout
     And User selects Credit card radio button
     Then The card div should not have any class
 
-    ## Author: Ingela Bladh
+  ## Author: Ingela Bladh
   Scenario: Verify the Continue to checkout button works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User clicks Continue to checkout button

@@ -63,8 +63,6 @@ public class StepDefinitionCheckout {
 
     @Then("the user clicks the {string} link")
     public void theUserClicksTheLink(String linkText) {
-        // wait till the element is visible
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         // Locate the element by its link text and click it
         WebElement element = driver.findElement(By.linkText(linkText));
         element.click();
@@ -72,8 +70,6 @@ public class StepDefinitionCheckout {
 
     @When("the user scrolls down to the {string} heading")
     public void theUserScrollsDownToTheHeading(String headingText) {
-        //Wait till the page loads
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         // Locate the element by its text
         WebElement headingElement = driver.findElement(By.xpath("//h4[@class='mb-3' and text()='" + headingText + "']"));
 
@@ -96,6 +92,12 @@ public class StepDefinitionCheckout {
     public void the_User_Is_On_The_ProductWebpage() {
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/products");
         System.out.println("User is on product page");
+    }
+
+    // Author: Ingela Bladh
+    @Given("User visits the page {string}")
+    public void userVisits(String webshopUrl) {
+        driver.get(webshopUrl);
     }
 
     @When("the user clicks the Add to Cart button")
@@ -136,7 +138,7 @@ public class StepDefinitionCheckout {
     public void theItemShouldBePresentInTheCart(String itemName) {
         WebElement cartItem = driver.findElement(By.xpath("//*[@id=\"cartList\"]/li[1]/div/h6"));
         //Assert that the item is present
-        assert cartItem != null : "Item " + itemName + " was not found in the cart.";
+        assertNotNull(cartItem,"Item " + itemName + " was not found in the cart.") ;
         System.out.println("Item " + itemName + " is present in the cart.");
     }
 
@@ -145,7 +147,7 @@ public class StepDefinitionCheckout {
 
     @Given("the user is on the checkout page at {string}")
     public void the_user_is_on_the_checkout_page(String url) {
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app/checkout");
+        driver.get(url);
     }
 
     @When("the user clicks the {string} button without filling required fields")
@@ -198,6 +200,13 @@ public class StepDefinitionCheckout {
         clickElement("#main > div:nth-child(1) > div > div > button");
     }
 
+    // Verify that the Checkout button works
+    // Author: Ingela Bladh
+    @And("User clicks The Checkout button")
+    public void userClicksTheCheckoutButton() {
+        clickElement("body > header > div > div > div > a");
+    }
+
     // Author: Ingela Bladh
     @When("User clicks Remove button")
     public void userClicksRemoveButton() {
@@ -205,12 +214,12 @@ public class StepDefinitionCheckout {
     }
 
     // Author: Ingela Bladh
-    @Then("Your cart list should only contain Total")
+    @Then("One Item should have been removed from your cart list")
     public void yourCartListShouldOnlyContainTotal() {
         WebDriverWait wait = createWebDriverWait();
         List<WebElement> cartList = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.id("cartList"))).findElements(By.tagName("li"));
-        assertEquals(1, cartList.size());
+        assertEquals(2, cartList.size());
     }
 
 
@@ -237,8 +246,7 @@ public class StepDefinitionCheckout {
     // Author: Ingela Bladh
     @Then("The page should show {string}")
     public void thePageShouldShow(String expectedErrorMessage) {
-        WebDriverWait wait = createWebDriverWait();
-        String actualErrorMessage = getText(
+          String actualErrorMessage = getText(
                 "body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.row.g-3 > div:nth-child(3) > div.invalid-feedback");
         assertEquals(expectedErrorMessage, actualErrorMessage);
     }

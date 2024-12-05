@@ -36,14 +36,6 @@ public class StepDefinitionProducts {
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
-    @Given("Webshop is available")
-    public void webshopIsAvailable() {
-    }
-
-    @When("User visits webshop-agil-testautomatiserare.netlify.app")
-    public void userVisitsWebshopAgilTestautomatiserareNetlifyApp() {
-    }
-
     // Validate Search Functionality
     // Author: Jarko Piironen
     @Given("User visits the products page at {string}")

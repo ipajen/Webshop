@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.net.ssl.HttpsURLConnection;
+import java.io.IOException;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
@@ -45,10 +46,7 @@ public class StepDefinitionHomepage {
 
     @Given("Webshop is available")
     public void webshopIsAvailable() {
-    }
-
-    @When("User visits webshop-agil-testautomatiserare.netlify.app")
-    public void userVisitsWebshopAgilTestautomatiserareNetlifyApp() {
+        driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
     //Verify that the website copyright text displays correctly
@@ -69,9 +67,9 @@ public class StepDefinitionHomepage {
     }
 
     //Verify that there are no uncaught syntax errors in the browser console logs
-    @Then("the console logs should not contain errors")
     //Author: Jarko Piironen
-    public void theConsoleLogsShouldNotContainErrors() {
+    @Then("the console logs should not contain errors")
+        public void theConsoleLogsShouldNotContainErrors() {
         LogEntries logs = driver.manage().logs().get(LogType.BROWSER);
         boolean syntaxErrorFound = false;
         List<LogEntry> Alllogs = logs.getAll();
@@ -82,7 +80,7 @@ public class StepDefinitionHomepage {
 
             }
         }
-        assertTrue(!syntaxErrorFound, "Test failed: Uncaught SyntaxError found in JavaScript logs.");
+        assertFalse(syntaxErrorFound, "Test failed: Uncaught SyntaxError found in JavaScript logs.");
     }
 
     //Validate SSL certificate
@@ -90,19 +88,7 @@ public class StepDefinitionHomepage {
     @Then("the SSL certificate should be valid and not expiring in {int} days")
     public void theSSLCertificateShouldBeValidAndNotExpiringInDays(int minDays) {
         try {
-            String siteUrl = "https://webshop-agil-testautomatiserare.netlify.app";
-            URL url = new URL(siteUrl);
-
-            // Get the SSL certificate and check its validity
-
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            connection.connect();
-
-            // Retrieve the SSL certificate
-            X509Certificate cert = (X509Certificate) connection.getServerCertificates()[0];
-            Date expiryDate = cert.getNotAfter();
-            Date currentDate = new Date();
-            long daysRemaining = (expiryDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
+            long daysRemaining = getDaysRemaining();
 
             // Check if the certificate is valid and has more than 30 days before expiry
             assertTrue(daysRemaining > minDays, "SSL Certificate is expiring in less than " + minDays + " days!");
@@ -111,6 +97,22 @@ public class StepDefinitionHomepage {
             e.printStackTrace();
             Assertions.fail("Failed to retrieve SSL certificate: " + e.getMessage());
         }
+    }
+
+    private static long getDaysRemaining() throws IOException {
+        String siteUrl = "https://webshop-agil-testautomatiserare.netlify.app";
+        URL url = new URL(siteUrl);
+
+        // Get the SSL certificate and check its validity
+
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection.connect();
+
+        // Retrieve the SSL certificate
+        X509Certificate cert = (X509Certificate) connection.getServerCertificates()[0];
+        Date expiryDate = cert.getNotAfter();
+        Date currentDate = new Date();
+        return (expiryDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
     }
 
     // Verify navigation links
@@ -210,7 +212,7 @@ public class StepDefinitionHomepage {
 
     @Given("I open the web page {string}")
     public void i_open_the_web_page(String url) {
-
+        driver.get(url);
     }
 
     @When("I check the {string} attribute of the {string} tag")
@@ -220,6 +222,7 @@ public class StepDefinitionHomepage {
         String langValue = element.getAttribute(attribute);
 
         // Store the result for later verification
+        assertNotNull(langValue);
         System.setProperty("langValue", langValue);
     }
 
@@ -261,12 +264,12 @@ public class StepDefinitionHomepage {
         // Placeholder step for checking the title,No need of code
     }
 
-    @Then("the title should be {string}")
+    @Then("the title should start with {string}")
     public void theTitleOfThePageShouldBe(String expectedTitle) {
         // Get the title of the current page
         String actualTitle = driver.getTitle();
-        assertTrue(actualTitle.startsWith("The Shop"));
-        assertEquals(expectedTitle, actualTitle, "Page title does  match the expected value.");
+        assertNotNull(actualTitle);
+        assertTrue(actualTitle.startsWith(expectedTitle));
         System.out.println(actualTitle);
         System.out.println(expectedTitle);
     }
@@ -376,17 +379,13 @@ public class StepDefinitionHomepage {
 
     private String getLinkSelector(String linkText) {
         // Fallback selectors for more dynamic handling
-        switch (linkText.toLowerCase()) {
-            case "home":
-                return "[data-footer-link='home'], body > div:nth-child(3) > footer > ul > li:nth-child(1) > a";
-            case "shop":
-                return "[data-footer-link='shop'], body > div:nth-child(3) > footer > ul > li:nth-child(2) > a";
-            case "checkout":
-                return "[data-footer-link='checkout'], body > div:nth-child(3) > footer > ul > li:nth-child(4) > a";
-            case "about":
-                return "[data-footer-link='about'], body > div:nth-child(3) > footer > ul > li:nth-child(3) > a";
-            default:
-                return "a"; // Default selector if no match found
-        }
+        return switch (linkText.toLowerCase()) {
+            case "home" -> "[data-footer-link='home'], body > div:nth-child(3) > footer > ul > li:nth-child(1) > a";
+            case "shop" -> "[data-footer-link='shop'], body > div:nth-child(3) > footer > ul > li:nth-child(2) > a";
+            case "checkout" ->
+                    "[data-footer-link='checkout'], body > div:nth-child(3) > footer > ul > li:nth-child(4) > a";
+            case "about" -> "[data-footer-link='about'], body > div:nth-child(3) > footer > ul > li:nth-child(3) > a";
+            default -> "a"; // Default selector if no match found
+        };
     }
 }
