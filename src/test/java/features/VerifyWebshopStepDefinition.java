@@ -63,33 +63,7 @@ public class VerifyWebshopStepDefinition {
         assertEquals(1, cartList.size());
     }
 
-    // Verify product has all elements
-    // Author: Ingela Bladh
-    @Then("Product should have all elements")
-    public void productShouldHaveAllElements() {
 
-        WebDriverWait wait = createWebDriverWait();
-
-        List<WebElement> list = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.id("main"))).findElements(By.className("col"));
-
-        for (WebElement card : list) {
-            // Image
-            assertNotNull(card.findElement(By.tagName("img")));
-
-            WebElement cardBody = card.findElement(By.className("card-body"));
-            assertNotNull(cardBody);
-
-            // Title
-            assertNotNull(cardBody.findElement(By.tagName("h3")));
-            // Price
-            assertNotNull(cardBody.findElement(By.className("fs-5")).findElement(By.tagName("strong")));
-            // Description
-            assertNotNull(cardBody.findElement(By.className("card-text")));
-            // Add to cart button
-            assertNotNull(cardBody.findElement(By.tagName("button")));
-        }
-    }
 
     // Verify email form field validation
 

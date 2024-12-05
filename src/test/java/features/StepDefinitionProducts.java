@@ -1,31 +1,24 @@
 package features;
 
 import io.cucumber.java.BeforeAll;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.net.URL;
-import java.security.cert.X509Certificate;
 import java.time.Duration;
-import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class StepDefinition {
+public class StepDefinitionProducts {
 
     static WebDriver driver;
 
@@ -197,5 +190,38 @@ public class StepDefinition {
             System.out.println("An error occurred: " + e.getMessage());
             throw e;
         }
+    }
+
+    // Verify product has all elements
+    // Author: Ingela Bladh
+    @Then("Product should have all elements")
+    public void productShouldHaveAllElements() {
+
+        WebDriverWait wait = createWebDriverWait();
+
+        List<WebElement> list = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.id("main"))).findElements(By.className("col"));
+
+        for (WebElement card : list) {
+            // Image
+            assertNotNull(card.findElement(By.tagName("img")));
+
+            WebElement cardBody = card.findElement(By.className("card-body"));
+            assertNotNull(cardBody);
+
+            // Title
+            assertNotNull(cardBody.findElement(By.tagName("h3")));
+            // Price
+            assertNotNull(cardBody.findElement(By.className("fs-5")).findElement(By.tagName("strong")));
+            // Description
+            assertNotNull(cardBody.findElement(By.className("card-text")));
+            // Add to cart button
+            assertNotNull(cardBody.findElement(By.tagName("button")));
+        }
+    }
+
+    // Author: Ingela Bladh
+    private WebDriverWait createWebDriverWait() {
+        return new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 }

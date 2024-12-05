@@ -13,10 +13,6 @@ Feature: Verify Webshop
     When User clicks Remove button
     Then Your cart list should only contain Total
 
-  Scenario: Verify product has image, title, price, description and Add to cart button
-    Given User visits "https://webshop-agil-testautomatiserare.netlify.app/products"
-    Then Product should have all elements
-
   Scenario: Verify email form field validation - Wrong
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User fills in email field with "test.email.com"
