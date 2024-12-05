@@ -299,7 +299,7 @@ public class CheckWebshopStepDefinition {
         // Get the title of the current page
         String actualTitle = driver.getTitle();
         assertTrue(actualTitle.startsWith("The Shop"));
-        //assertEquals(expectedTitle, actualTitle, "Page title does  match the expected value.");
+        assertEquals(expectedTitle, actualTitle, "Page title does  match the expected value.");
         System.out.println(actualTitle);
         System.out.println(expectedTitle);
     }
