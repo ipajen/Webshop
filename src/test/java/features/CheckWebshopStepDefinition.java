@@ -23,8 +23,6 @@ public class CheckWebshopStepDefinition {
     private static WebDriver driver;  // Instance variable for WebDriver
     private static WebDriverWait wait;
 
-    private WebElement imgElement;
-
     @BeforeAll
     public static void createDriver() {
         // Setup ChromeDriver options
@@ -44,56 +42,6 @@ public class CheckWebshopStepDefinition {
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         // Navigate to the Webpage
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
-    }
-
-    // Check the website Title & Heading
-    //    Author: Barnali Mohanty
-
-    @Given("Webshop.Netify is available")
-    public void webshopIsAvailable() {
-    }
-
-    @When("User checks the image element")
-    public void userChecksTheImageElement() {
-        // Locate the <img> element
-        imgElement = driver.findElement(By.cssSelector("img.rounded-lg-3"));
-        assertNotNull(imgElement, "Image element not found on the page.");
-    }
-
-    @Then("the image source should be {string}")
-    public void theImageSourceShouldBe(String expectedSrc) {
-        // Get the `src` attribute value
-        String actualSrc = imgElement.getAttribute("src");
-
-        // Print and assert the `src`
-        System.out.println("Image source: " + actualSrc);
-        assertEquals(expectedSrc, actualSrc, "The image source URL does  match.");
-    }
-
-    @Then("the image height should be {string}")
-    public void theImageHeightShouldBe(String expectedHeight) {
-        // Get the `height` attribute value
-        String actualHeight = imgElement.getAttribute("height");
-
-        // Print and assert the `height`
-        System.out.println("Image height: " + actualHeight);
-        assertEquals(expectedHeight, actualHeight, "The height matches");
-    }
-
-    @Then("the image should have an alt text")
-    public void theImageShouldHaveAnAltText() {
-        String altText = imgElement.getAttribute("alt");
-        System.out.println("Image alt text: '" + altText + "'");
-
-        // Assert the `alt` attribute exists
-        assertNotNull(altText, "The image does not have an alt attribute.");
-
-        // Allow empty `alt` text for decorative images (optional)
-        if (altText.isEmpty()) {
-            System.out.println("Warning: The image has an empty alt attribute.");
-        } else {
-            System.out.println("The image alt text is: " + altText);
-        }
     }
 
     //  verify Billing and Payment headings on check out page
@@ -190,47 +138,6 @@ public class CheckWebshopStepDefinition {
         System.out.println("Item " + itemName + " is present in the cart.");
     }
 
-    @Given("I open the web page {string}")
-    public void i_open_the_web_page(String url) {
-
-    }
-
-    @When("I check the {string} attribute of the {string} tag")
-    public void i_check_the_attribute_of_the_tag(String attribute, String tagName) {
-        // Find the <html> element and get the 'lang' attribute
-        WebElement element = driver.findElement(By.tagName(tagName));
-        String langValue = element.getAttribute(attribute);
-
-        // Store the result for later verification
-        System.setProperty("langValue", langValue);
-    }
-
-    @Then("the language should be {string}")
-    public void the_language_should_be(String expectedLanguage) {
-
-        // Retrieve the stored attribute value
-        String actualLanguage = System.getProperty("langValue");
-        assertEquals(expectedLanguage, actualLanguage);
-
-    }
-
-    @Then("the content should appear in English")
-    public void the_content_should_appear_in_english() {
-        // Locate a prominent element on the page to validate the content
-        WebElement element = driver.findElement(By.tagName("h1")); // Adjust the locator as needed
-        String content = element.getText();
-
-        // Print the fetched content for debugging
-        System.out.println("Fetched Content: " + content);
-
-        // Check if the content contains expected English keywords or phrases
-        if (content.toLowerCase().contains("shop") || content.toLowerCase().contains("products") || content.toLowerCase().contains("checkout")) {
-            System.out.println("The content appears to be in English.");
-        } else {
-            System.err.println("The content does NOT appear to be in English.");
-        }
-    }
-
     //Verify the error message ,when there is no input in the checkout form
     //Barnali Mohanty
 
@@ -280,65 +187,6 @@ public class CheckWebshopStepDefinition {
         } catch (Exception e) {
             System.err.println("An unexpected error occurred: " + e.getMessage());
         }
-    }
-
-    // Check the website Title & Heading
-    //    Author: Barnali Mohanty
-
-    @Given("User is on the Webpage")
-    public void user_is_on_the_webpage() {
-    }
-
-    @When("User checks the title")
-    public void userChecksTheTitle() {
-        // Placeholder step for checking the title,No need of code
-    }
-
-    @Then("the title should be {string}")
-    public void theTitleOfThePageShouldBe(String expectedTitle) {
-        // Get the title of the current page
-        String actualTitle = driver.getTitle();
-        assertTrue(actualTitle.startsWith("The Shop"));
-        assertEquals(expectedTitle, actualTitle, "Page title does  match the expected value.");
-        System.out.println(actualTitle);
-        System.out.println(expectedTitle);
-    }
-
-    @Then("the heading should be {string}")
-    public void theHeadingShouldBe(String expectedHeadingText) {
-        // Locate the main heading using a CSS selector
-        WebElement heading = driver.findElement(By.cssSelector("body > header > div > div > a > h1"));
-
-        // Validate the text of the heading
-        assertEquals(expectedHeadingText, heading.getText(), "Page heading does  match the expected value.");
-    }
-
-    // Check the main text on the webpage "This shop is all you need" exists
-    //    Author: Barnali Mohanty
-
-    @Given("User is on the Home page")
-    public void userIsOnTheHomePage() {
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app");
-    }
-
-    @When("User checks the main heading")
-    public void userChecksTheMainHeading() {
-        // Placeholder: Action will be verified in the next step
-    }
-
-    @Then("the main heading should be {string}")
-    public void theMainHeadingShouldBe(String expectedHeading) {
-        // Locate the element
-        WebElement heading = driver.findElement(By.cssSelector("h2.display-4.fw-bold.lh-1"));
-        
-        // Get the text of the element
-        String actualHeading = heading.getText();
-        
-        // Print the heading text
-        System.out.println("The main heading text is: " + actualHeading);
-
-        // Assert the text matches the expected value
-        assertEquals(expectedHeading, actualHeading, "The main heading does match the expected value.");
     }
 
     @AfterAll

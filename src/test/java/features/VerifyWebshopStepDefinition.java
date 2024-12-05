@@ -34,60 +34,6 @@ public class VerifyWebshopStepDefinition {
         driver = new ChromeDriver(option);
     }
 
-    // Author: Ingela Bladh
-    @Given("User visits {string}")
-    public void userVisits(String webshopUrl) {
-        driver.get(webshopUrl);
-    }
-
-    // Verify that the Shop link works
-    // Author: Ingela Bladh
-    @When("User clicks Shop link")
-    public void userClicksShopLink() {
-        clickElement("body > header > div > div > ul > li:nth-child(2) > a");
-    }
-
-    // Verify that the About link works
-    // Author: Ingela Bladh
-    @When("User clicks About link")
-    public void userClicksAboutLink() {
-        clickElement("body > header > div > div > ul > li:nth-child(3) > a");
-    }
-
-    // Verify that the Checkout button works
-    // Author: Ingela Bladh
-    @When("User clicks Checkout button")
-    public void userClicksCheckoutButton() {
-        clickElement("body > header > div > div > div > a");
-    }
-
-    // Verify that the Home image link works
-    // Author: Ingela Bladh
-    @When("User clicks Home image link")
-    public void userClicksHomeImageLink() {
-        clickElement("body > header > div > div > a > h1");
-    }
-
-    // Verify that the Home link works
-    // Author: Ingela Bladh
-    @When("User clicks Home link")
-    public void userClicksHomeLink() {
-        clickElement("body > header > div > div > ul > li:nth-child(1) > a");
-    }
-
-    // Author: Ingela Bladh
-    @Then("The current url should be {string}")
-    public void theCurrentUrlShouldBe(String expectedUrl) {
-        assertEquals(expectedUrl, driver.getCurrentUrl());
-    }
-
-    // Verify that the "All products" button on Homepage leads to the Products page
-    // Author: Ingela Bladh
-    @When("User clicks All products button")
-    public void userClicksAllProductsButton() {
-        clickElement("body > div.container.my-5 > div > div.col-lg-7.p-3.p-lg-5.pt-lg-3 > div > button");
-    }
-
     // Verify that the "To all products" button on About page leads to the Products page
     // Author: Ingela Bladh
     @When("User clicks To all products button")
