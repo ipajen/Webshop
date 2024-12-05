@@ -51,7 +51,7 @@ Feature: Verify Webshop
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User fills in email field with "test.email.com"
     And User clicks Continue to checkout button
-    Then An error message should be displayed
+    Then The page should show "Please enter a valid email address for shipping updates."
 
   Scenario: Verify email form field validation - Correct
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
@@ -59,9 +59,18 @@ Feature: Verify Webshop
     And User clicks Continue to checkout button
     Then A check mark should be displayed
 
-  Scenario: Verify there are three payment radio buttons
+  Scenario: Verify the payment radio buttons work
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
-    Then There should be three payment radio buttons
+    And User selects PayPal radio button
+    Then The page should display "You will be redirected to PayPal in the next step."
+    And The card div should have the class "hidden-element"
+    And User selects Credit card radio button
+    Then The card div should not have any class
+    And User selects PayPal radio button
+    Then The page should display "You will be redirected to PayPal in the next step."
+    And The card div should have the class "hidden-element"
+    And User selects Credit card radio button
+    Then The card div should not have any class
 
   Scenario: Verify the Continue to checkout button works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
