@@ -1,30 +1,52 @@
-Feature: Verify Webshop
+Feature: Webshop - Checkout
   Automatic webshop test for the school.
 
-  Scenario: Verify that the "To all products" button on About page leads to Products page
-    Given User visits "https://webshop-agil-testautomatiserare.netlify.app/about"
-    When User clicks To all products button
-    Then The current url should be "https://webshop-agil-testautomatiserare.netlify.app/products.html"
+  ## Author: Barnali Mohanty
+  Scenario: User scroll to locate checkout button and verify Billing and Payment headings on check out page
+    Given the user is on the webshop homepage
+    When the user scrolls down to the "Checkout" link
+    Then the user clicks the "Checkout" link
+    And the user scrolls down to the "Billing address" heading
+    Then the "Billing address" heading text should be "Billing address"
+    And the user scrolls down to the "Payment" heading
+    Then the "Payment" heading text should be "Payment"
 
+## Author: Barnali Mohanty
+  Scenario: Verify items in the cart
+    Given the user is on the ProductWebpage
+    When the user clicks the Add to Cart button
+    And the user clicks the Checkout button
+    Then the item "Mens Casual Premium Slim Fit T-Shirts" should be present in the cart
+
+    ## Author: Barnali Mohanty
+  Scenario: Display error messages when required fields are left empty
+    Given the user is on the checkout page at "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    When the user clicks the "Continue to checkout" button without filling required fields
+    Then the error messages for required fields should be displayed
+
+    ## Author: Ingela Bladh
   Scenario: Verify that the Remove button works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/products"
-    And User clicks Add to cart button
+    And User clicks the Add to cart button
     And User clicks Checkout button
     When User clicks Remove button
     Then Your cart list should only contain Total
 
+    ## Author: Ingela Bladh
   Scenario: Verify email form field validation - Wrong
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User fills in email field with "test.email.com"
     And User clicks Continue to checkout button
     Then The page should show "Please enter a valid email address for shipping updates."
 
+    ## Author: Ingela Bladh
   Scenario: Verify email form field validation - Correct
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User fills in email field with "test@email.com"
     And User clicks Continue to checkout button
     Then A check mark should be displayed
 
+    ## Author: Ingela Bladh
   Scenario: Verify the payment radio buttons work
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User selects PayPal radio button
@@ -38,9 +60,8 @@ Feature: Verify Webshop
     And User selects Credit card radio button
     Then The card div should not have any class
 
+    ## Author: Ingela Bladh
   Scenario: Verify the Continue to checkout button works
     Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User clicks Continue to checkout button
     Then The form tag should have the classes "needs-validation was-validated"
-
-
