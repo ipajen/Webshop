@@ -47,6 +47,13 @@ public class VerifyWebshopStepDefinition {
         clickElement("body > header > div > div > ul > li:nth-child(2) > a");
     }
 
+    // Verify that the About link works
+    // Author: Ingela Bladh
+    @When("User clicks About link")
+    public void userClicksAboutLink() {
+        clickElement("body > header > div > div > ul > li:nth-child(3) > a");
+    }
+
     // Verify that the Checkout button works
     // Author: Ingela Bladh
     @When("User clicks Checkout button")
@@ -74,11 +81,18 @@ public class VerifyWebshopStepDefinition {
         assertEquals(expectedUrl, driver.getCurrentUrl());
     }
 
-    // Verify that the "All products" button leads to the Products page
+    // Verify that the "All products" button on Homepage leads to the Products page
     // Author: Ingela Bladh
     @When("User clicks All products button")
     public void userClicksAllProductsButton() {
         clickElement("body > div.container.my-5 > div > div.col-lg-7.p-3.p-lg-5.pt-lg-3 > div > button");
+    }
+
+    // Verify that the "To all products" button on About page leads to the Products page
+    // Author: Ingela Bladh
+    @When("User clicks To all products button")
+    public void userClicksToAllProductsButton() {
+        clickElement("body > div.container.my-5 > div > div > button");
     }
 
     // Verify that the Remove button works
@@ -151,12 +165,12 @@ public class VerifyWebshopStepDefinition {
 
     // Wrong email
     // Author: Ingela Bladh
-    @Then("An error message should be displayed")
-    public void anErrorMessageShouldBeDisplayed() {
+    @Then("The page should show {string}")
+    public void thePageShouldShow(String expectedErrorMessage) {
         WebDriverWait wait = createWebDriverWait();
-        String actualErrorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(
-                "body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.row.g-3 > div:nth-child(3) > div.invalid-feedback"))).getText();
-        assertEquals("Please enter a valid email address for shipping updates.", actualErrorMessage);
+        String actualErrorMessage = getText(
+                "body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.row.g-3 > div:nth-child(3) > div.invalid-feedback");
+        assertEquals(expectedErrorMessage, actualErrorMessage);
     }
 
     // Correct email
@@ -169,15 +183,46 @@ public class VerifyWebshopStepDefinition {
         assertNotNull(mark);
     }
 
-    // Verify there are three payment radio buttons
+    // Verify the PayPal radio button works
     // Author: Ingela Bladh
-    @Then("There should be three payment radio buttons")
-    public void thereShouldBeThreeRadioButtons() {
-        WebDriverWait wait = createWebDriverWait();
-        List<WebElement> list = wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.cssSelector(" body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.my-3")))
-                .findElements(By.className("form-check"));
-        assertEquals(3, list.size());
+    @And("User selects PayPal radio button")
+    public void userSelectsPayPalRadioButton() {
+        clickElement("#paypal");
+    }
+
+    // Verify the Credit card radio button works
+    // Author: Ingela Bladh
+    @And("User selects Credit card radio button")
+    public void userSelectsCreditCardRadioButton() {
+        clickElement("#credit");
+    }
+
+    // Verify the Debit card radio button works
+    // Author: Ingela Bladh
+    @And("User selects Debit card radio button")
+    public void userSelectsDebitCardRadioButton() {
+        clickElement("##debit");
+    }
+
+    // Author: Ingela Bladh
+    @Then("The page should display {string}")
+    public void thePageShouldDisplay(String expectedText) {
+        String actualText = getText("#paypalInfo > p > i");
+        assertEquals(expectedText, actualText);
+    }
+
+    // Author: Ingela Bladh
+    @And("The card div should have the class {string}")
+    public void theCardDivShouldHaveTheClass(String expectedClass) {
+        WebElement div = getCardDiv();
+        assertEquals(expectedClass, div.getAttribute("class"));
+    }
+
+    // Author: Ingela Bladh
+    @Then("The card div should not have any class")
+    public void theCardDivShouldNotHaveAnyClass() {
+        WebElement div = getCardDiv();
+        assertEquals("", div.getAttribute("class"));
     }
 
     // Verify the Continue to checkout button works
@@ -194,6 +239,19 @@ public class VerifyWebshopStepDefinition {
         WebDriverWait wait = createWebDriverWait();
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector(cssSelector))).click();
+    }
+
+    // Author: Ingela Bladh
+    private String getText(String cssSelector) {
+        WebDriverWait wait = createWebDriverWait();
+        return wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(
+                cssSelector))).getText();
+    }
+
+    // Author: Ingela Bladh
+    private WebElement getCardDiv() {
+        WebDriverWait wait = createWebDriverWait();
+        return wait.until(ExpectedConditions.presenceOfElementLocated(By.id("card")));
     }
 
     // Author: Ingela Bladh
