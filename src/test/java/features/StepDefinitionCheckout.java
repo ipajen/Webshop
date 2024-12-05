@@ -2,6 +2,7 @@ package features;
 
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.BeforeAll;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -15,15 +16,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CheckWebshopStepDefinition {
+public class StepDefinitionCheckout {
 
     private static WebDriver driver;  // Instance variable for WebDriver
     private static WebDriverWait wait;
-
-    private WebElement imgElement;
 
     @BeforeAll
     public static void createDriver() {
@@ -46,56 +46,6 @@ public class CheckWebshopStepDefinition {
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
-    // Check the website Title & Heading
-    //    Author: Barnali Mohanty
-
-    @Given("Webshop.Netify is available")
-    public void webshopIsAvailable() {
-    }
-
-    @When("User checks the image element")
-    public void userChecksTheImageElement() {
-        // Locate the <img> element
-        imgElement = driver.findElement(By.cssSelector("img.rounded-lg-3"));
-        assertNotNull(imgElement, "Image element not found on the page.");
-    }
-
-    @Then("the image source should be {string}")
-    public void theImageSourceShouldBe(String expectedSrc) {
-        // Get the `src` attribute value
-        String actualSrc = imgElement.getAttribute("src");
-
-        // Print and assert the `src`
-        System.out.println("Image source: " + actualSrc);
-        assertEquals(expectedSrc, actualSrc, "The image source URL does  match.");
-    }
-
-    @Then("the image height should be {string}")
-    public void theImageHeightShouldBe(String expectedHeight) {
-        // Get the `height` attribute value
-        String actualHeight = imgElement.getAttribute("height");
-
-        // Print and assert the `height`
-        System.out.println("Image height: " + actualHeight);
-        assertEquals(expectedHeight, actualHeight, "The height matches");
-    }
-
-    @Then("the image should have an alt text")
-    public void theImageShouldHaveAnAltText() {
-        String altText = imgElement.getAttribute("alt");
-        System.out.println("Image alt text: '" + altText + "'");
-
-        // Assert the `alt` attribute exists
-        assertNotNull(altText, "The image does not have an alt attribute.");
-
-        // Allow empty `alt` text for decorative images (optional)
-        if (altText.isEmpty()) {
-            System.out.println("Warning: The image has an empty alt attribute.");
-        } else {
-            System.out.println("The image alt text is: " + altText);
-        }
-    }
-
     //  verify Billing and Payment headings on check out page
     @Given("the user is on the webshop homepage")
     public void theUserIsOnTheHomepage() {
@@ -113,8 +63,6 @@ public class CheckWebshopStepDefinition {
 
     @Then("the user clicks the {string} link")
     public void theUserClicksTheLink(String linkText) {
-        // wait till the element is visible
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         // Locate the element by its link text and click it
         WebElement element = driver.findElement(By.linkText(linkText));
         element.click();
@@ -122,8 +70,6 @@ public class CheckWebshopStepDefinition {
 
     @When("the user scrolls down to the {string} heading")
     public void theUserScrollsDownToTheHeading(String headingText) {
-        //Wait till the page loads
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         // Locate the element by its text
         WebElement headingElement = driver.findElement(By.xpath("//h4[@class='mb-3' and text()='" + headingText + "']"));
 
@@ -146,6 +92,12 @@ public class CheckWebshopStepDefinition {
     public void the_User_Is_On_The_ProductWebpage() {
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/products");
         System.out.println("User is on product page");
+    }
+
+    // Author: Ingela Bladh
+    @Given("User visits the page {string}")
+    public void userVisits(String webshopUrl) {
+        driver.get(webshopUrl);
     }
 
     @When("the user clicks the Add to Cart button")
@@ -186,49 +138,8 @@ public class CheckWebshopStepDefinition {
     public void theItemShouldBePresentInTheCart(String itemName) {
         WebElement cartItem = driver.findElement(By.xpath("//*[@id=\"cartList\"]/li[1]/div/h6"));
         //Assert that the item is present
-        assert cartItem != null : "Item " + itemName + " was not found in the cart.";
+        assertNotNull(cartItem,"Item " + itemName + " was not found in the cart.") ;
         System.out.println("Item " + itemName + " is present in the cart.");
-    }
-
-    @Given("I open the web page {string}")
-    public void i_open_the_web_page(String url) {
-
-    }
-
-    @When("I check the {string} attribute of the {string} tag")
-    public void i_check_the_attribute_of_the_tag(String attribute, String tagName) {
-        // Find the <html> element and get the 'lang' attribute
-        WebElement element = driver.findElement(By.tagName(tagName));
-        String langValue = element.getAttribute(attribute);
-
-        // Store the result for later verification
-        System.setProperty("langValue", langValue);
-    }
-
-    @Then("the language should be {string}")
-    public void the_language_should_be(String expectedLanguage) {
-
-        // Retrieve the stored attribute value
-        String actualLanguage = System.getProperty("langValue");
-        assertEquals(expectedLanguage, actualLanguage);
-
-    }
-
-    @Then("the content should appear in English")
-    public void the_content_should_appear_in_english() {
-        // Locate a prominent element on the page to validate the content
-        WebElement element = driver.findElement(By.tagName("h1")); // Adjust the locator as needed
-        String content = element.getText();
-
-        // Print the fetched content for debugging
-        System.out.println("Fetched Content: " + content);
-
-        // Check if the content contains expected English keywords or phrases
-        if (content.toLowerCase().contains("shop") || content.toLowerCase().contains("products") || content.toLowerCase().contains("checkout")) {
-            System.out.println("The content appears to be in English.");
-        } else {
-            System.err.println("The content does NOT appear to be in English.");
-        }
     }
 
     //Verify the error message ,when there is no input in the checkout form
@@ -236,7 +147,7 @@ public class CheckWebshopStepDefinition {
 
     @Given("the user is on the checkout page at {string}")
     public void the_user_is_on_the_checkout_page(String url) {
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app/checkout");
+        driver.get(url);
     }
 
     @When("the user clicks the {string} button without filling required fields")
@@ -282,63 +193,148 @@ public class CheckWebshopStepDefinition {
         }
     }
 
-    // Check the website Title & Heading
-    //    Author: Barnali Mohanty
-
-    @Given("User is on the Webpage")
-    public void user_is_on_the_webpage() {
+    // Verify that the Remove button works
+    // Author: Ingela Bladh
+    @And("User clicks the Add to cart button")
+    public void userClicksTheAddToCartButton() {
+        clickElement("#main > div:nth-child(1) > div > div > button");
     }
 
-    @When("User checks the title")
-    public void userChecksTheTitle() {
-        // Placeholder step for checking the title,No need of code
+    // Verify that the Checkout button works
+    // Author: Ingela Bladh
+    @And("User clicks The Checkout button")
+    public void userClicksTheCheckoutButton() {
+        clickElement("body > header > div > div > div > a");
     }
 
-    @Then("the title should be {string}")
-    public void theTitleOfThePageShouldBe(String expectedTitle) {
-        // Get the title of the current page
-        String actualTitle = driver.getTitle();
-        assertTrue(actualTitle.startsWith("The Shop"));
-        assertEquals(expectedTitle, actualTitle, "Page title does  match the expected value.");
-        System.out.println(actualTitle);
-        System.out.println(expectedTitle);
+    // Author: Ingela Bladh
+    @When("User clicks Remove button")
+    public void userClicksRemoveButton() {
+        clickElement("#cartList > li.list-group-item.d-flex.justify-content-between.lh-sm > div > button");
     }
 
-    @Then("the heading should be {string}")
-    public void theHeadingShouldBe(String expectedHeadingText) {
-        // Locate the main heading using a CSS selector
-        WebElement heading = driver.findElement(By.cssSelector("body > header > div > div > a > h1"));
-
-        // Validate the text of the heading
-        assertEquals(expectedHeadingText, heading.getText(), "Page heading does  match the expected value.");
+    // Author: Ingela Bladh
+    @Then("One Item should have been removed from your cart list")
+    public void yourCartListShouldOnlyContainTotal() {
+        WebDriverWait wait = createWebDriverWait();
+        List<WebElement> cartList = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.id("cartList"))).findElements(By.tagName("li"));
+        assertEquals(2, cartList.size());
     }
 
-    // Check the main text on the webpage "This shop is all you need" exists
-    //    Author: Barnali Mohanty
 
-    @Given("User is on the Home page")
-    public void userIsOnTheHomePage() {
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app");
+
+    // Verify email form field validation
+
+    // Author: Ingela Bladh
+    @And("User fills in email field with {string}")
+    public void userFillsInEmailFieldWith(String email) {
+        WebDriverWait wait = createWebDriverWait();
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.id("email"))).sendKeys(email);
     }
 
-    @When("User checks the main heading")
-    public void userChecksTheMainHeading() {
-        // Placeholder: Action will be verified in the next step
+    // Author: Ingela Bladh
+    @And("User clicks Continue to checkout button")
+    public void userClicksContinueToCheckoutButton() {
+        WebDriverWait wait = createWebDriverWait();
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > button"))).submit();
     }
 
-    @Then("the main heading should be {string}")
-    public void theMainHeadingShouldBe(String expectedHeading) {
-        // Locate the element
-        WebElement heading = driver.findElement(By.cssSelector("h2.display-4.fw-bold.lh-1"));
-        
-        // Get the text of the element
-        String actualHeading = heading.getText();
-        
-        // Print the heading text
-        System.out.println("The main heading text is: " + actualHeading);
+    // Wrong email
+    // Author: Ingela Bladh
+    @Then("The page should show {string}")
+    public void thePageShouldShow(String expectedErrorMessage) {
+          String actualErrorMessage = getText(
+                "body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.row.g-3 > div:nth-child(3) > div.invalid-feedback");
+        assertEquals(expectedErrorMessage, actualErrorMessage);
+    }
 
-        // Assert the text matches the expected value
-        assertEquals(expectedHeading, actualHeading, "The main heading does match the expected value.");
+    // Correct email
+    // Author: Ingela Bladh
+    @Then("A check mark should be displayed")
+    public void aCheckMarkShouldBeDisplayed() {
+        WebDriverWait wait = createWebDriverWait();
+        WebElement mark = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(
+                "body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.row.g-3 > div:nth-child(3) > div:nth-child(3)")));
+        assertNotNull(mark);
+    }
+
+    // Verify the PayPal radio button works
+    // Author: Ingela Bladh
+    @And("User selects PayPal radio button")
+    public void userSelectsPayPalRadioButton() {
+        clickElement("#paypal");
+    }
+
+    // Verify the Credit card radio button works
+    // Author: Ingela Bladh
+    @And("User selects Credit card radio button")
+    public void userSelectsCreditCardRadioButton() {
+        clickElement("#credit");
+    }
+
+    // Verify the Debit card radio button works
+    // Author: Ingela Bladh
+    @And("User selects Debit card radio button")
+    public void userSelectsDebitCardRadioButton() {
+        clickElement("##debit");
+    }
+
+    // Author: Ingela Bladh
+    @Then("The page should display {string}")
+    public void thePageShouldDisplay(String expectedText) {
+        String actualText = getText("#paypalInfo > p > i");
+        assertEquals(expectedText, actualText);
+    }
+
+    // Author: Ingela Bladh
+    @And("The card div should have the class {string}")
+    public void theCardDivShouldHaveTheClass(String expectedClass) {
+        WebElement div = getCardDiv();
+        assertEquals(expectedClass, div.getAttribute("class"));
+    }
+
+    // Author: Ingela Bladh
+    @Then("The card div should not have any class")
+    public void theCardDivShouldNotHaveAnyClass() {
+        WebElement div = getCardDiv();
+        assertEquals("", div.getAttribute("class"));
+    }
+
+    // Verify the Continue to checkout button works
+    @Then("The form tag should have the classes {string}")
+    public void theFormTagShouldHaveTheClasses(String expectedClasses) {
+        WebDriverWait wait = createWebDriverWait();
+        WebElement form = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.tagName("form")));
+        assertEquals(expectedClasses, form.getAttribute("class"));
+    }
+
+    // Author: Ingela Bladh
+    private void clickElement(String cssSelector) {
+        WebDriverWait wait = createWebDriverWait();
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector(cssSelector))).click();
+    }
+
+    // Author: Ingela Bladh
+    private String getText(String cssSelector) {
+        WebDriverWait wait = createWebDriverWait();
+        return wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(
+                cssSelector))).getText();
+    }
+
+    // Author: Ingela Bladh
+    private WebElement getCardDiv() {
+        WebDriverWait wait = createWebDriverWait();
+        return wait.until(ExpectedConditions.presenceOfElementLocated(By.id("card")));
+    }
+
+    // Author: Ingela Bladh
+    private WebDriverWait createWebDriverWait() {
+        return new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
     @AfterAll

@@ -1,31 +1,24 @@
 package features;
 
 import io.cucumber.java.BeforeAll;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.net.URL;
-import java.security.cert.X509Certificate;
 import java.time.Duration;
-import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class StepDefinition {
+public class StepDefinitionProducts {
 
     static WebDriver driver;
 
@@ -41,76 +34,6 @@ public class StepDefinition {
 
         driver = new ChromeDriver(option);
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
-    }
-
-    @Given("Webshop is available")
-    public void webshopIsAvailable() {
-    }
-
-    @When("User visits webshop-agil-testautomatiserare.netlify.app")
-    public void userVisitsWebshopAgilTestautomatiserareNetlifyApp() {
-    }
-
-    //Verify that the website copyright text displays correctly
-    //Author: Jarko Piironen
-    @Then("the copyright text should be {string}")
-    public void theCopyrightTextShouldBe(String expectedCopyrightText) {
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        WebElement websiteCopyright = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.cssSelector("  body > div:nth-child(3) > footer > p"))
-        );
-
-        // Get the text from the copyright element
-        String websiteCopyrightText = websiteCopyright.getText();
-        System.out.println(" - Copyright text: " + websiteCopyrightText);
-
-        assertEquals(expectedCopyrightText, websiteCopyrightText);
-    }
-
-    //Verify that there are no uncaught syntax errors in the browser console logs
-    @Then("the console logs should not contain errors")
-    //Author: Jarko Piironen
-    public void theConsoleLogsShouldNotContainErrors() {
-        LogEntries logs = driver.manage().logs().get(LogType.BROWSER);
-        boolean syntaxErrorFound = false;
-        List<LogEntry> Alllogs = logs.getAll();
-        for (LogEntry entry : Alllogs) {
-            System.out.println(driver + " Console Error test " + entry.getMessage());
-            if (entry.getMessage().contains("Uncaught SyntaxError")) {
-                syntaxErrorFound = true;
-
-            }
-        }
-        assertTrue(!syntaxErrorFound, "Test failed: Uncaught SyntaxError found in JavaScript logs.");
-    }
-
-    //Validate SSL certificate
-    //Author: Jarko Piironen
-    @Then("the SSL certificate should be valid and not expiring in {int} days")
-    public void theSSLCertificateShouldBeValidAndNotExpiringInDays(int minDays) {
-        try {
-            String siteUrl = "https://webshop-agil-testautomatiserare.netlify.app";
-            URL url = new URL(siteUrl);
-
-            // Get the SSL certificate and check its validity
-
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            connection.connect();
-
-            // Retrieve the SSL certificate
-            X509Certificate cert = (X509Certificate) connection.getServerCertificates()[0];
-            Date expiryDate = cert.getNotAfter();
-            Date currentDate = new Date();
-            long daysRemaining = (expiryDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
-
-            // Check if the certificate is valid and has more than 30 days before expiry
-            assertTrue(daysRemaining > minDays, "SSL Certificate is expiring in less than " + minDays + " days!");
-            System.out.println("SSL Certificate is valid and expires in " + daysRemaining + " days.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assertions.fail("Failed to retrieve SSL certificate: " + e.getMessage());
-        }
     }
 
     // Validate Search Functionality
@@ -176,71 +99,6 @@ public class StepDefinition {
         } catch (Exception e) {
             System.out.println("Failed to validate search results: " + e.getMessage());
             Assertions.fail("Test failed because the expected search result was not found.");
-        }
-    }
-
-    // Verify navigation links
-    // Author: Jarko Piironen
-    @When("the user clicks the following {string} link")
-    public void theUserClicksTheFollowingLink(String linkText) {
-        String selector = getLinkSelector(linkText);
-
-        try {
-            Thread.sleep(1000);
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-            WebElement linkElement;
-
-            // Attempt to locate the link with the primary selector
-            try {
-                linkElement = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(selector)));
-                System.out.println("Link found with primary selector: " + selector);
-            } catch (TimeoutException e) {
-                // Fallback to locating the link by visible text
-                System.out.println("Primary selector failed for link: " + linkText + ". Trying By.linkText.");
-                linkElement = wait.until(ExpectedConditions.elementToBeClickable(By.linkText(linkText)));
-            }
-
-            // Scroll into view and ensure the element is clickable
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", linkElement);
-            Thread.sleep(500); // Let the page stabilize after scrolling
-            ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -100);"); // Offset for sticky headers
-
-            // Retry clicking with JavaScript if necessary
-            try {
-                linkElement.click();
-                System.out.println("Clicked on the link: " + linkText);
-            } catch (ElementClickInterceptedException ex) {
-                System.out.println("Element click intercepted. Attempting JavaScript click.");
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", linkElement);
-            }
-
-        } catch (Exception e) {
-            System.out.println("Failed to click the link: " + linkText + " using selector: " + selector + ". Error: " + e.getMessage());
-            Assertions.fail("Could not click the link: " + linkText);
-        }
-    }
-
-    @Then("the {string} page should be displayed")
-    public void thePageShouldBeDisplayed(String page) {
-        // Wait for the URL to change and assert the current URL
-        boolean isCorrectPage = new WebDriverWait(driver, Duration.ofSeconds(60))
-                .until(ExpectedConditions.urlToBe(page));
-        Assertions.assertTrue(isCorrectPage, "Expected page URL: " + page + ", but got: " + driver.getCurrentUrl());
-    }
-
-    private String getLinkSelector(String linkText) {
-        // Fallback selectors for more dynamic handling
-        switch (linkText.toLowerCase()) {
-            case "home":
-                return "[data-footer-link='home'], body > div:nth-child(3) > footer > ul > li:nth-child(1) > a";
-            case "shop":
-                return "[data-footer-link='shop'], body > div:nth-child(3) > footer > ul > li:nth-child(2) > a";
-            case "checkout":
-                return "[data-footer-link='checkout'], body > div:nth-child(3) > footer > ul > li:nth-child(4) > a";
-            case "about":
-                return "[data-footer-link='about'], body > div:nth-child(3) > footer > ul > li:nth-child(3) > a";
-            default:
-                return "a"; // Default selector if no match found
         }
     }
 
@@ -324,5 +182,38 @@ public class StepDefinition {
             System.out.println("An error occurred: " + e.getMessage());
             throw e;
         }
+    }
+
+    // Verify product has all elements
+    // Author: Ingela Bladh
+    @Then("Product should have all elements")
+    public void productShouldHaveAllElements() {
+
+        WebDriverWait wait = createWebDriverWait();
+
+        List<WebElement> list = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.id("main"))).findElements(By.className("col"));
+
+        for (WebElement card : list) {
+            // Image
+            assertNotNull(card.findElement(By.tagName("img")));
+
+            WebElement cardBody = card.findElement(By.className("card-body"));
+            assertNotNull(cardBody);
+
+            // Title
+            assertNotNull(cardBody.findElement(By.tagName("h3")));
+            // Price
+            assertNotNull(cardBody.findElement(By.className("fs-5")).findElement(By.tagName("strong")));
+            // Description
+            assertNotNull(cardBody.findElement(By.className("card-text")));
+            // Add to cart button
+            assertNotNull(cardBody.findElement(By.tagName("button")));
+        }
+    }
+
+    // Author: Ingela Bladh
+    private WebDriverWait createWebDriverWait() {
+        return new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 }
