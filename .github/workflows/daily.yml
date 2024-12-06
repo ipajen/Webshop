@@ -1,9 +1,9 @@
 name: Daily Test runs
 
-# Schedule the workflow to run at 10:00 UTC every day
+# Schedule the workflow to run at 15:00 UTC every day
 on:
   schedule:
-    - cron: '0 10 * * *' # Daily at 10:00 UTC
+    - cron: '0 15 * * *' # Daily at 15:00 UTC
   workflow_dispatch: # Allow manual triggering
 
 jobs:
