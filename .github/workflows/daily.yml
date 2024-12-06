@@ -1,0 +1,35 @@
+name: Daily Test runs
+
+# Schedule the workflow to run at 10:00 UTC every day
+on:
+  schedule:
+    - cron: '0 10 * * *' # Daily at 10:00 UTC
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  build:
+    name: 'Daily Build and Test'
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - uses: actions/checkout@v4
+
+      # Step 2: Cache local Maven repository to speed up builds
+      - name: Cache local Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: build-${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            build-${{ runner.os }}-maven-
+
+      # Step 3: Set up the Java Development Kit (JDK)
+      - name: Set up JDK 23
+        uses: AdoptOpenJDK/install-jdk@v1
+        with:
+          version: '23'
+
+      # Step 4: Build and test with Maven
+      - name: Build and Run Tests
+        run: mvn -B package --file pom.xml
