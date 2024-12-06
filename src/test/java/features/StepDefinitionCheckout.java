@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class StepDefinitionCheckout {
 
     private static WebDriver driver;  // Instance variable for WebDriver
-    private static WebDriverWait wait;
 
     @BeforeAll
     public static void createDriver() {
@@ -39,170 +38,23 @@ public class StepDefinitionCheckout {
 
         // Initialize WebDriver
         driver = new ChromeDriver(options);
-
-        // Initialize WebDriverWait
-        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        // Navigate to the Webpage
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
-    }
-
-    //  verify Billing and Payment headings on check out page
-    @Given("the user is on the webshop homepage")
-    public void theUserIsOnTheHomepage() {
-
-    }
-
-    @When("the user scrolls down to the {string} link")
-    public void theUserScrollsDownToTheLink(String linkText) {
-        // Locate the element by its link text
-        WebElement element = driver.findElement(By.linkText(linkText));
-
-        // Scroll into view
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-    }
-
-    @Then("the user clicks the {string} link")
-    public void theUserClicksTheLink(String linkText) {
-        // Locate the element by its link text and click it
-        WebElement element = driver.findElement(By.linkText(linkText));
-        element.click();
-    }
-
-    @When("the user scrolls down to the {string} heading")
-    public void theUserScrollsDownToTheHeading(String headingText) {
-        // Locate the element by its text
-        WebElement headingElement = driver.findElement(By.xpath("//h4[@class='mb-3' and text()='" + headingText + "']"));
-
-        // Scroll into view
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", headingElement);
-    }
-
-    @Then("the {string} heading text should be {string}")
-    public void theHeadingTextShouldBe(String headingType, String expectedText) {
-        // Locate the heading element by its text
-        WebElement headingElement = driver.findElement(By.xpath("//h4[@class='mb-3' and text()='" + expectedText + "']"));
-
-        // Verify the text
-        String actualText = headingElement.getText();
-        assertEquals(expectedText, actualText, headingType + " heading text does not match.");
-    }
-    //Verify the presence of the product in your cart
-
-    @Given("the user is on the ProductWebpage")
-    public void the_User_Is_On_The_ProductWebpage() {
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app/products");
-        System.out.println("User is on product page");
-    }
-
-    // Author: Ingela Bladh
-    @Given("User visits the page {string}")
-    public void userVisits(String webshopUrl) {
-        driver.get(webshopUrl);
-    }
-
-    @When("the user clicks the Add to Cart button")
-    public void userClicksAddToCartButton() throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement addToCartButton = driver.findElement(By.xpath("//*[@id=\"main\"]/div[2]/div/div/button"));
-
-        //Add time for the page to load properly
-
-        Thread.sleep(1000);
-        addToCartButton.click();
-        //Just debugging
-        System.out.println("Is button displayed: " + addToCartButton.isDisplayed());
-        System.out.println("Is button enabled: " + addToCartButton.isEnabled());
-        System.out.println("Is button selected: " + addToCartButton.isSelected());
-
-        Thread.sleep(2000);
-        // See if the cart is updated ,when you click the add to cart button
-        boolean countUpdated = wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("buttonSize"), "1"));
-        if (countUpdated) {
-            WebElement cartCount = driver.findElement(By.id("buttonSize"));
-            String actualCount = cartCount.getText();
-            System.out.println("Cart count updated successfully: " + actualCount);
-        } else {
-            System.out.println("Cart count did not update as expected.");
-        }
-    }
-
-    @When("the user clicks the Checkout button")
-    public void userClicksCheckoutButton() throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement checkoutButton = driver.findElement(By.xpath("/html/body/header/div/div/div/a"));
-        checkoutButton.click();
-        System.out.println("Successfully clicked the Checkout button.");
-    }
-
-    @Then("the item {string} should be present in the cart")
-    public void theItemShouldBePresentInTheCart(String itemName) {
-        WebElement cartItem = driver.findElement(By.xpath("//*[@id=\"cartList\"]/li[1]/div/h6"));
-        //Assert that the item is present
-        assertNotNull(cartItem,"Item " + itemName + " was not found in the cart.") ;
-        System.out.println("Item " + itemName + " is present in the cart.");
-    }
-
-    //Verify the error message ,when there is no input in the checkout form
-    //Barnali Mohanty
-
-    @Given("the user is on the checkout page at {string}")
-    public void the_user_is_on_the_checkout_page(String url) {
-        driver.get(url);
-    }
-
-    @When("the user clicks the {string} button without filling required fields")
-    public void the_user_clicks_the_button_without_filling_required_fields(String buttonLabel) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        // Locate the button using XPath
-        WebElement checkoutButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='" + buttonLabel + "']")));
-
-        // Scroll to the button using JavaScriptExecutor
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView(true);", checkoutButton);
-
-        // Wait for the button to be clickable
-        wait.until(ExpectedConditions.elementToBeClickable(checkoutButton));
-
-        // Click the button using JavaScriptExecutor
-        js.executeScript("arguments[0].click();", checkoutButton);
-    }
-
-    @Then("the error messages for required fields should be displayed")
-    public void the_error_messages_for_required_fields_should_be_displayed() {
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-            // First Name error
-            WebElement firstNameError = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/main/div[2]/div[2]/form/div[1]/div[1]/div")));
-            assertTrue(firstNameError.isDisplayed(), "First name error message is  displayed");
-
-            // Last Name error
-            WebElement lastNameError = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/main/div[2]/div[2]/form/div[1]/div[2]/div")));
-            assertTrue(lastNameError.isDisplayed(), "Last name error message is  displayed");
-
-            // Email error
-            WebElement emailError = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/main/div[2]/div[2]/form/div[1]/div[3]/div")));
-            assertTrue(emailError.isDisplayed(), "Email error message is  displayed");
-
-            System.out.println("All error messages are displayed as expected!");
-        } catch (AssertionError e) {
-            System.err.println("Assertion failed: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("An unexpected error occurred: " + e.getMessage());
-        }
     }
 
     // Verify that the Remove button works
+    // Author: Ingela Bladh
+    @Given("User visits the page {string}")
+    public void userVisitsThePage(String webshopUrl) {
+        driver.get(webshopUrl);
+    }
+
     // Author: Ingela Bladh
     @And("User clicks the Add to cart button")
     public void userClicksTheAddToCartButton() {
         clickElement("#main > div:nth-child(1) > div > div > button");
     }
 
-    // Verify that the Checkout button works
     // Author: Ingela Bladh
-    @And("User clicks The Checkout button")
+    @And("User clicks the Checkout button")
     public void userClicksTheCheckoutButton() {
         clickElement("body > header > div > div > div > a");
     }
@@ -214,18 +66,15 @@ public class StepDefinitionCheckout {
     }
 
     // Author: Ingela Bladh
-    @Then("One Item should have been removed from your cart list")
+    @Then("Your cart list should only contain Total")
     public void yourCartListShouldOnlyContainTotal() {
         WebDriverWait wait = createWebDriverWait();
         List<WebElement> cartList = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.id("cartList"))).findElements(By.tagName("li"));
-        assertEquals(2, cartList.size());
+        assertEquals(1, cartList.size());
     }
 
-
-
     // Verify email form field validation
-
     // Author: Ingela Bladh
     @And("User fills in email field with {string}")
     public void userFillsInEmailFieldWith(String email) {
@@ -242,16 +91,16 @@ public class StepDefinitionCheckout {
                 By.cssSelector("body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > button"))).submit();
     }
 
-    // Wrong email
+    // Invalid email
     // Author: Ingela Bladh
     @Then("The page should show {string}")
     public void thePageShouldShow(String expectedErrorMessage) {
-          String actualErrorMessage = getText(
+        String actualErrorMessage = getText(
                 "body > main > div.row.g-5 > div.col-md-7.col-lg-6 > form > div.row.g-3 > div:nth-child(3) > div.invalid-feedback");
         assertEquals(expectedErrorMessage, actualErrorMessage);
     }
 
-    // Correct email
+    // Valid email
     // Author: Ingela Bladh
     @Then("A check mark should be displayed")
     public void aCheckMarkShouldBeDisplayed() {
@@ -335,6 +184,159 @@ public class StepDefinitionCheckout {
     // Author: Ingela Bladh
     private WebDriverWait createWebDriverWait() {
         return new WebDriverWait(driver, Duration.ofSeconds(30));
+    }
+
+    // User scrolls to locate checkout button and verify Billing and Payment headings on check out page
+    // Author: Barnali Mohanty
+    @Given("the user is on the webshop homepage")
+    public void theUserIsOnTheHomepage() {
+        // Navigate to the Webpage
+        driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
+    }
+
+    // Author: Barnali Mohanty
+    @When("the user scrolls down to the {string} link")
+    public void theUserScrollsDownToTheLink(String linkText) {
+        // Locate the element by its link text
+        WebElement element = driver.findElement(By.linkText(linkText));
+
+        // Scroll into view
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+    }
+
+    // Author: Barnali Mohanty
+    @And("the user clicks the {string} link")
+    public void theUserClicksTheLink(String linkText) {
+        // Locate the element by its link text and click it
+        WebElement element = driver.findElement(By.linkText(linkText));
+        element.click();
+    }
+
+    // Author: Barnali Mohanty
+    @And("the user scrolls down to the {string} heading")
+    public void theUserScrollsDownToTheHeading(String headingText) {
+        // Locate the element by its text
+        WebElement headingElement = driver.findElement(By.xpath("//h4[@class='mb-3' and text()='" + headingText + "']"));
+
+        // Scroll into view
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", headingElement);
+    }
+
+    // Author: Barnali Mohanty
+    @Then("the {string} heading text should be {string}")
+    public void theHeadingTextShouldBe(String headingType, String expectedText) {
+        // Locate the heading element by its text
+        WebElement headingElement = driver.findElement(By.xpath("//h4[@class='mb-3' and text()='" + expectedText + "']"));
+
+        // Verify the text
+        String actualText = headingElement.getText();
+        assertEquals(expectedText, actualText, headingType + " heading text does not match.");
+    }
+
+    // Verify items in the cart
+    // Author: Barnali Mohanty
+    @Given("the user is on the ProductWebpage")
+    public void the_User_Is_On_The_ProductWebpage() {
+        driver.get("https://webshop-agil-testautomatiserare.netlify.app/products");
+        System.out.println("User is on product page");
+    }
+
+    // Author: Barnali Mohanty
+    @When("the user clicks the Add to Cart button")
+    public void userClicksAddToCartButton() throws InterruptedException {
+        Thread.sleep(2000);
+        WebElement addToCartButton = driver.findElement(By.xpath("//*[@id=\"main\"]/div[2]/div/div/button"));
+
+        //Add time for the page to load properly
+
+        Thread.sleep(1000);
+        addToCartButton.click();
+        //Just debugging
+        System.out.println("Is button displayed: " + addToCartButton.isDisplayed());
+        System.out.println("Is button enabled: " + addToCartButton.isEnabled());
+        System.out.println("Is button selected: " + addToCartButton.isSelected());
+
+        Thread.sleep(2000);
+        // See if the cart is updated ,when you click the add to cart button
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        boolean countUpdated = wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("buttonSize"), "1"));
+        if (countUpdated) {
+            WebElement cartCount = driver.findElement(By.id("buttonSize"));
+            String actualCount = cartCount.getText();
+            System.out.println("Cart count updated successfully: " + actualCount);
+        } else {
+            System.out.println("Cart count did not update as expected.");
+        }
+    }
+
+    // Author: Barnali Mohanty
+    @And("the user clicks the Checkout button")
+    public void userClicksCheckoutButton() throws InterruptedException {
+        Thread.sleep(2000);
+        WebElement checkoutButton = driver.findElement(By.xpath("/html/body/header/div/div/div/a"));
+        checkoutButton.click();
+        System.out.println("Successfully clicked the Checkout button.");
+    }
+
+    // Author: Barnali Mohanty
+    @Then("the item {string} should be present in the cart")
+    public void theItemShouldBePresentInTheCart(String itemName) {
+        WebElement cartItem = driver.findElement(By.xpath("//*[@id=\"cartList\"]/li[1]/div/h6"));
+        //Assert that the item is present
+        assertNotNull(cartItem, "Item " + itemName + " was not found in the cart.");
+        System.out.println("Item " + itemName + " is present in the cart.");
+    }
+
+    // Display error messages when required fields are left empty
+    // Author: Barnali Mohanty
+    @Given("the user is on the checkout page at {string}")
+    public void the_user_is_on_the_checkout_page(String url) {
+        driver.get(url);
+    }
+
+    // Author: Barnali Mohanty
+    @When("the user clicks the {string} button without filling required fields")
+    public void the_user_clicks_the_button_without_filling_required_fields(String buttonLabel) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Locate the button using XPath
+        WebElement checkoutButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='" + buttonLabel + "']")));
+
+        // Scroll to the button using JavaScriptExecutor
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", checkoutButton);
+
+        // Wait for the button to be clickable
+        wait.until(ExpectedConditions.elementToBeClickable(checkoutButton));
+
+        // Click the button using JavaScriptExecutor
+        js.executeScript("arguments[0].click();", checkoutButton);
+    }
+
+    // Author: Barnali Mohanty
+    @Then("the error messages for required fields should be displayed")
+    public void the_error_messages_for_required_fields_should_be_displayed() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+            // First Name error
+            WebElement firstNameError = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/main/div[2]/div[2]/form/div[1]/div[1]/div")));
+            assertTrue(firstNameError.isDisplayed(), "First name error message is  displayed");
+
+            // Last Name error
+            WebElement lastNameError = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/main/div[2]/div[2]/form/div[1]/div[2]/div")));
+            assertTrue(lastNameError.isDisplayed(), "Last name error message is  displayed");
+
+            // Email error
+            WebElement emailError = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/main/div[2]/div[2]/form/div[1]/div[3]/div")));
+            assertTrue(emailError.isDisplayed(), "Email error message is  displayed");
+
+            System.out.println("All error messages are displayed as expected!");
+        } catch (AssertionError e) {
+            System.err.println("Assertion failed: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred: " + e.getMessage());
+        }
     }
 
     @AfterAll
