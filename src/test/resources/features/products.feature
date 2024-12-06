@@ -1,7 +1,8 @@
 Feature: Webshop - Products
   Automatic webshop test for the school.
 
-  Background: User visits the products page at "https://webshop-agil-testautomatiserare.netlify.app/products"
+  Background: 
+    Given User visits the products page at "https://webshop-agil-testautomatiserare.netlify.app/products"
 
   ## Author: Jarko Piironen
   Scenario: Validate Search Functionality
