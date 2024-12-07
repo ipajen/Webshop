@@ -30,37 +30,29 @@ public class StepDefinitionAbout {
         driver = new ChromeDriver(option);
     }
 
+    // Verify that the "To all products" button on About page leads to the Products page
+    // Author: Ingela Bladh
     @Given("User navigates to {string}")
     public void userNavigatesTo(String url) {
         driver.get(url);
     }
 
-    // Verify that the "To all products" button on About page leads to the Products page
     // Author: Ingela Bladh
     @When("User clicks To all products button")
     public void userClicksToAllProductsButton() {
-        WebDriverWait wait = createWebDriverWait();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector("body > div.container.my-5 > div > div > button"))).click();
     }
 
     // Author: Ingela Bladh
     @Then("The url should be {string}")
-    public void theCurrentUrlShouldBe(String expectedUrl) {
+    public void theUrlShouldBe(String expectedUrl) {
         assertEquals(expectedUrl, driver.getCurrentUrl());
     }
-
-
-    // Author: Ingela Bladh
-    private WebDriverWait createWebDriverWait() {
-        return new WebDriverWait(driver, Duration.ofSeconds(30));
-    }
-
 
     @AfterAll
     public static void quitDriver() {
         driver.quit();
     }
-
-
 }

@@ -1,6 +1,7 @@
 package features;
 
 import io.cucumber.java.BeforeAll;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -41,15 +42,15 @@ public class StepDefinitionHomepage {
         option.addArguments("--headless");
 
         driver = new ChromeDriver(option);
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
+    //Verify that the website copyright text displays correctly
+    //Author: Jarko Piironen
     @Given("Webshop is available")
     public void webshopIsAvailable() {
         driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
-    //Verify that the website copyright text displays correctly
     //Author: Jarko Piironen
     @Then("the copyright text should be {string}")
     public void theCopyrightTextShouldBe(String expectedCopyrightText) {
@@ -69,7 +70,7 @@ public class StepDefinitionHomepage {
     //Verify that there are no uncaught syntax errors in the browser console logs
     //Author: Jarko Piironen
     @Then("the console logs should not contain errors")
-        public void theConsoleLogsShouldNotContainErrors() {
+    public void theConsoleLogsShouldNotContainErrors() {
         LogEntries logs = driver.manage().logs().get(LogType.BROWSER);
         boolean syntaxErrorFound = false;
         List<LogEntry> Alllogs = logs.getAll();
@@ -99,6 +100,7 @@ public class StepDefinitionHomepage {
         }
     }
 
+    //Author: Jarko Piironen
     private static long getDaysRemaining() throws IOException {
         String siteUrl = "https://webshop-agil-testautomatiserare.netlify.app";
         URL url = new URL(siteUrl);
@@ -156,6 +158,20 @@ public class StepDefinitionHomepage {
         }
     }
 
+    // Author: Jarko Piironen
+    private String getLinkSelector(String linkText) {
+        // Fallback selectors for more dynamic handling
+        return switch (linkText.toLowerCase()) {
+            case "home" -> "[data-footer-link='home'], body > div:nth-child(3) > footer > ul > li:nth-child(1) > a";
+            case "shop" -> "[data-footer-link='shop'], body > div:nth-child(3) > footer > ul > li:nth-child(2) > a";
+            case "checkout" ->
+                    "[data-footer-link='checkout'], body > div:nth-child(3) > footer > ul > li:nth-child(4) > a";
+            case "about" -> "[data-footer-link='about'], body > div:nth-child(3) > footer > ul > li:nth-child(3) > a";
+            default -> "a"; // Default selector if no match found
+        };
+    }
+
+    // Author: Jarko Piironen
     @Then("the {string} page should be displayed")
     public void thePageShouldBeDisplayed(String page) {
         // Wait for the URL to change and assert the current URL
@@ -164,9 +180,8 @@ public class StepDefinitionHomepage {
         Assertions.assertTrue(isCorrectPage, "Expected page URL: " + page + ", but got: " + driver.getCurrentUrl());
     }
 
-    // Check the website Title & Heading
-    //    Author: Barnali Mohanty
-
+    // Verify the image element on the webpage
+    // Author: Barnali Mohanty
     @When("User checks the image element")
     public void userChecksTheImageElement() {
         // Locate the <img> element
@@ -174,6 +189,7 @@ public class StepDefinitionHomepage {
         assertNotNull(imgElement, "Image element not found on the page.");
     }
 
+    // Author: Barnali Mohanty
     @Then("the image source should be {string}")
     public void theImageSourceShouldBe(String expectedSrc) {
         // Get the `src` attribute value
@@ -184,6 +200,7 @@ public class StepDefinitionHomepage {
         assertEquals(expectedSrc, actualSrc, "The image source URL does  match.");
     }
 
+    // Author: Barnali Mohanty
     @Then("the image height should be {string}")
     public void theImageHeightShouldBe(String expectedHeight) {
         // Get the `height` attribute value
@@ -194,6 +211,7 @@ public class StepDefinitionHomepage {
         assertEquals(expectedHeight, actualHeight, "The height matches");
     }
 
+    // Author: Barnali Mohanty
     @Then("the image should have an alt text")
     public void theImageShouldHaveAnAltText() {
         String altText = imgElement.getAttribute("alt");
@@ -210,11 +228,14 @@ public class StepDefinitionHomepage {
         }
     }
 
+    // Check if the declared language and content language match
+    // Author: Barnali Mohanty
     @Given("I open the web page {string}")
     public void i_open_the_web_page(String url) {
         driver.get(url);
     }
 
+    // Author: Barnali Mohanty
     @When("I check the {string} attribute of the {string} tag")
     public void i_check_the_attribute_of_the_tag(String attribute, String tagName) {
         // Find the <html> element and get the 'lang' attribute
@@ -226,16 +247,17 @@ public class StepDefinitionHomepage {
         System.setProperty("langValue", langValue);
     }
 
+    // Author: Barnali Mohanty
     @Then("the language should be {string}")
     public void the_language_should_be(String expectedLanguage) {
 
         // Retrieve the stored attribute value
         String actualLanguage = System.getProperty("langValue");
         assertEquals(expectedLanguage, actualLanguage);
-
     }
 
-    @Then("the content should appear in English")
+    // Author: Barnali Mohanty
+    @And("the content should appear in English")
     public void the_content_should_appear_in_english() {
         // Locate a prominent element on the page to validate the content
         WebElement element = driver.findElement(By.tagName("h1")); // Adjust the locator as needed
@@ -252,18 +274,20 @@ public class StepDefinitionHomepage {
         }
     }
 
-    // Check the website Title & Heading
-    //    Author: Barnali Mohanty
-
+    // Check website title
+    // Author: Barnali Mohanty
     @Given("User is on the Webpage")
     public void user_is_on_the_webpage() {
+        driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
+    // Author: Barnali Mohanty
     @When("User checks the title")
     public void userChecksTheTitle() {
         // Placeholder step for checking the title,No need of code
     }
 
+    // Author: Barnali Mohanty
     @Then("the title should start with {string}")
     public void theTitleOfThePageShouldBe(String expectedTitle) {
         // Get the title of the current page
@@ -274,7 +298,8 @@ public class StepDefinitionHomepage {
         System.out.println(expectedTitle);
     }
 
-    @Then("the heading should be {string}")
+    // Author: Barnali Mohanty
+    @And("the heading should be {string}")
     public void theHeadingShouldBe(String expectedHeadingText) {
         // Locate the main heading using a CSS selector
         WebElement heading = driver.findElement(By.cssSelector("body > header > div > div > a > h1"));
@@ -283,19 +308,20 @@ public class StepDefinitionHomepage {
         assertEquals(expectedHeadingText, heading.getText(), "Page heading does  match the expected value.");
     }
 
-    // Check the main text on the webpage "This shop is all you need" exists
-    //    Author: Barnali Mohanty
-
+    // User checks the main heading text
+    // Author: Barnali Mohanty
     @Given("User is on the Home page")
     public void userIsOnTheHomePage() {
         driver.get("https://webshop-agil-testautomatiserare.netlify.app");
     }
 
+    // Author: Barnali Mohanty
     @When("User checks the main heading")
     public void userChecksTheMainHeading() {
         // Placeholder: Action will be verified in the next step
     }
 
+    // Author: Barnali Mohanty
     @Then("the main heading should be {string}")
     public void theMainHeadingShouldBe(String expectedHeading) {
         // Locate the element
@@ -311,6 +337,7 @@ public class StepDefinitionHomepage {
         assertEquals(expectedHeading, actualHeading, "The main heading does match the expected value.");
     }
 
+    // Verify header navigation links work
     // Author: Ingela Bladh
     @Given("User visits {string}")
     public void userVisits(String webshopUrl) {
@@ -367,25 +394,8 @@ public class StepDefinitionHomepage {
 
     // Author: Ingela Bladh
     private void clickElement(String cssSelector) {
-        WebDriverWait wait = createWebDriverWait();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector(cssSelector))).click();
-    }
-
-    // Author: Ingela Bladh
-    private WebDriverWait createWebDriverWait() {
-        return new WebDriverWait(driver, Duration.ofSeconds(30));
-    }
-
-    private String getLinkSelector(String linkText) {
-        // Fallback selectors for more dynamic handling
-        return switch (linkText.toLowerCase()) {
-            case "home" -> "[data-footer-link='home'], body > div:nth-child(3) > footer > ul > li:nth-child(1) > a";
-            case "shop" -> "[data-footer-link='shop'], body > div:nth-child(3) > footer > ul > li:nth-child(2) > a";
-            case "checkout" ->
-                    "[data-footer-link='checkout'], body > div:nth-child(3) > footer > ul > li:nth-child(4) > a";
-            case "about" -> "[data-footer-link='about'], body > div:nth-child(3) > footer > ul > li:nth-child(3) > a";
-            default -> "a"; // Default selector if no match found
-        };
     }
 }

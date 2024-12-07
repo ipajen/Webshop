@@ -33,7 +33,6 @@ public class StepDefinitionProducts {
         option.addArguments("--headless");
 
         driver = new ChromeDriver(option);
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
     }
 
     // Validate Search Functionality
@@ -43,6 +42,7 @@ public class StepDefinitionProducts {
         driver.get(productsUrl);
     }
 
+    // Author: Jarko Piironen
     @When("User searches for {string}")
     public void userSearchesFor(String searchQuery) {
         try {
@@ -76,6 +76,7 @@ public class StepDefinitionProducts {
         }
     }
 
+    // Author: Jarko Piironen
     @Then("the search results should display items related to {string}")
     public void theSearchResultsShouldDisplayItemsRelatedTo(String searchQuery) {
         try {
@@ -142,6 +143,7 @@ public class StepDefinitionProducts {
         }
     }
 
+    // Author: Jarko Piironen
     @Then("the user verifies that the {string} loads its respective products")
     public void theUserVerifiesThatTheLoadsItsRespectiveProducts(String filter) {
         try {
@@ -189,7 +191,7 @@ public class StepDefinitionProducts {
     @Then("Product should have all elements")
     public void productShouldHaveAllElements() {
 
-        WebDriverWait wait = createWebDriverWait();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
         List<WebElement> list = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.id("main"))).findElements(By.className("col"));
@@ -210,10 +212,5 @@ public class StepDefinitionProducts {
             // Add to cart button
             assertNotNull(cardBody.findElement(By.tagName("button")));
         }
-    }
-
-    // Author: Ingela Bladh
-    private WebDriverWait createWebDriverWait() {
-        return new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 }
