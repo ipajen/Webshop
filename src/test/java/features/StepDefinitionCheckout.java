@@ -40,7 +40,7 @@ public class StepDefinitionCheckout {
         driver = new ChromeDriver(options);
     }
 
-    // Verify that the Remove button works
+    // Verify that the Total sum is correct and that the Remove button works
     // Author: Ingela Bladh
     @Given("User visits the page {string}")
     public void userVisitsThePage(String webshopUrl) {
@@ -48,21 +48,47 @@ public class StepDefinitionCheckout {
     }
 
     // Author: Ingela Bladh
-    @And("User clicks the Add to cart button")
-    public void userClicksTheAddToCartButton() {
+    @And("User adds backpack to cart")
+    public void userAddsBackpackToCart() {
         clickElement("#main > div:nth-child(1) > div > div > button");
     }
 
     // Author: Ingela Bladh
-    @And("User clicks the Checkout button")
-    public void userClicksTheCheckoutButton() {
-        clickElement("body > header > div > div > div > a");
+    @And("User adds Tshirt to cart")
+    public void userAddsTshirtToCart() {
+        clickElement("#main > div:nth-child(2) > div > div > button");
     }
 
     // Author: Ingela Bladh
-    @When("User clicks Remove button")
-    public void userClicksRemoveButton() {
-        clickElement("#cartList > li.list-group-item.d-flex.justify-content-between.lh-sm > div > button");
+    @And("User adds jacket to cart")
+    public void userAddsJacketToCart() {
+        clickElement("#main > div:nth-child(3) > div > div > button");
+    }
+
+    // Author: Ingela Bladh
+    @Then("The Total sum should be correct")
+    public void theTotalSumShouldBeCorrect() {
+        WebDriverWait wait = createWebDriverWait();
+        List<WebElement> cartList = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.id("cartList"))).findElements(By.tagName("li"));
+
+        double expectedSum = 0;
+        for (int i = 0; i <= 2; i++) {
+            double price = Double.parseDouble(cartList.get(i).findElement(By.tagName("span")).getText().substring(1));
+            expectedSum += price;
+        }
+
+        double actualSum = Double.parseDouble(cartList.getLast().findElement(By.tagName("strong")).getText().substring(1));
+
+        assertEquals(expectedSum, actualSum);
+    }
+
+    // Author; Ingela Bladh
+    @And("User removes items")
+    public void userRemovesItems() {
+        for (int i = 0; i <= 2; i++) {
+            clickElement("#cartList > li:nth-child(1) > div > button");
+        }
     }
 
     // Author: Ingela Bladh

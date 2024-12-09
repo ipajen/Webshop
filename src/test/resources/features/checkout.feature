@@ -2,11 +2,14 @@ Feature: Webshop - Checkout
   Automatic webshop test for the school.
 
   ## Author: Ingela Bladh
-  Scenario: Verify that the Remove button works
+  Scenario: Verify that the Total sum is correct and that the Remove button works
     Given User visits the page "https://webshop-agil-testautomatiserare.netlify.app/products"
-    And User clicks the Add to cart button
-    And User clicks the Checkout button
-    When User clicks Remove button
+    And User adds backpack to cart
+    And User adds Tshirt to cart
+    And User adds jacket to cart
+    When User visits the page "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    Then The Total sum should be correct
+    And User removes items
     Then Your cart list should only contain Total
 
   ## Author: Ingela Bladh
