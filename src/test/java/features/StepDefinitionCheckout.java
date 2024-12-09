@@ -40,7 +40,7 @@ public class StepDefinitionCheckout {
         driver = new ChromeDriver(options);
     }
 
-    // Verify that the Total sum is correct
+    // Verify that the Total sum is correct and that the Remove button works
     // Author: Ingela Bladh
     @Given("User visits the page {string}")
     public void userVisitsThePage(String webshopUrl) {
