@@ -78,7 +78,7 @@ public class StepDefinitionCheckout {
             expectedSum += price;
         }
 
-        double actualSum = Double.parseDouble(cartList.getLast().findElement(By.tagName("span")).getText().substring(1));
+        double actualSum = Double.parseDouble(cartList.getLast().findElement(By.tagName("strong")).getText().substring(1));
 
         assertEquals(expectedSum, actualSum);
     }
