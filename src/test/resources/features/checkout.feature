@@ -14,21 +14,21 @@ Feature: Webshop - Checkout
 
   ## Author: Ingela Bladh
   Scenario: Verify email form field validation - Invalid email
-    Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    Given User visits the page "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User fills in email field with "test.email.com"
     And User clicks Continue to checkout button
     Then The page should show "Please enter a valid email address for shipping updates."
 
   ## Author: Ingela Bladh
   Scenario: Verify email form field validation - Valid email
-    Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    Given User visits the page "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User fills in email field with "test@email.com"
     And User clicks Continue to checkout button
     Then A check mark should be displayed
 
   ## Author: Ingela Bladh
   Scenario: Verify the payment radio buttons work
-    Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    Given User visits the page "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User selects PayPal radio button
     Then The page should display "You will be redirected to PayPal in the next step."
     And The card div should have the class "hidden-element"
@@ -42,13 +42,13 @@ Feature: Webshop - Checkout
 
   ## Author: Ingela Bladh
   Scenario: Verify the Continue to checkout button works
-    Given User visits "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    Given User visits the page "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     And User clicks Continue to checkout button
     Then The form tag should have the classes "needs-validation was-validated"
 
   ## Author: Barnali Mohanty
   Scenario: User scrolls to locate checkout button and verify Billing and Payment headings on check out page
-    Given the user is on the webshop homepage
+    Given User visits the page "https://webshop-agil-testautomatiserare.netlify.app/"
     When the user scrolls down to the "Checkout" link
     And the user clicks the "Checkout" link
     And the user scrolls down to the "Billing address" heading
@@ -58,13 +58,13 @@ Feature: Webshop - Checkout
 
   ## Author: Barnali Mohanty
   Scenario: Verify items in the cart
-    Given the user is on the ProductWebpage
+    Given User visits the page "https://webshop-agil-testautomatiserare.netlify.app/products"
     When the user clicks the Add to Cart button
     And the user clicks the Checkout button
     Then the item "Mens Casual Premium Slim Fit T-Shirts" should be present in the cart
 
   ## Author: Barnali Mohanty
   Scenario: Display error messages when required fields are left empty
-    Given the user is on the checkout page at "https://webshop-agil-testautomatiserare.netlify.app/checkout"
+    Given User visits the page "https://webshop-agil-testautomatiserare.netlify.app/checkout"
     When the user clicks the "Continue to checkout" button without filling required fields
     Then the error messages for required fields should be displayed

@@ -179,6 +179,7 @@ public class StepDefinitionCheckout {
     }
 
     // Verify the Continue to checkout button works
+    // Author: Ingela Bladh
     @Then("The form tag should have the classes {string}")
     public void theFormTagShouldHaveTheClasses(String expectedClasses) {
         WebDriverWait wait = createWebDriverWait();
@@ -213,13 +214,6 @@ public class StepDefinitionCheckout {
     }
 
     // User scrolls to locate checkout button and verify Billing and Payment headings on check out page
-    // Author: Barnali Mohanty
-    @Given("the user is on the webshop homepage")
-    public void theUserIsOnTheHomepage() {
-        // Navigate to the Webpage
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
-    }
-
     // Author: Barnali Mohanty
     @When("the user scrolls down to the {string} link")
     public void theUserScrollsDownToTheLink(String linkText) {
@@ -261,17 +255,12 @@ public class StepDefinitionCheckout {
 
     // Verify items in the cart
     // Author: Barnali Mohanty
-    @Given("the user is on the ProductWebpage")
-    public void the_User_Is_On_The_ProductWebpage() {
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app/products");
-        System.out.println("User is on product page");
-    }
-
-    // Author: Barnali Mohanty
     @When("the user clicks the Add to Cart button")
     public void userClicksAddToCartButton() throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement addToCartButton = driver.findElement(By.xpath("//*[@id=\"main\"]/div[2]/div/div/button"));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        WebElement addToCartButton = wait.until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.xpath("//*[@id=\"main\"]/div[2]/div/div/button")));
 
         //Add time for the page to load properly
 
@@ -284,7 +273,6 @@ public class StepDefinitionCheckout {
 
         Thread.sleep(2000);
         // See if the cart is updated ,when you click the add to cart button
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         boolean countUpdated = wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("buttonSize"), "1"));
         if (countUpdated) {
             WebElement cartCount = driver.findElement(By.id("buttonSize"));
@@ -314,12 +302,6 @@ public class StepDefinitionCheckout {
     }
 
     // Display error messages when required fields are left empty
-    // Author: Barnali Mohanty
-    @Given("the user is on the checkout page at {string}")
-    public void the_user_is_on_the_checkout_page(String url) {
-        driver.get(url);
-    }
-
     // Author: Barnali Mohanty
     @When("the user clicks the {string} button without filling required fields")
     public void the_user_clicks_the_button_without_filling_required_fields(String buttonLabel) {

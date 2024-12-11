@@ -30,6 +30,7 @@ public class StepDefinitionHomepage {
 
     static WebDriver driver;
     private WebElement imgElement;
+    private static final String HOMEPAGE_URL = "https://webshop-agil-testautomatiserare.netlify.app/";
 
     @BeforeAll
     public static void createDriver() {
@@ -48,7 +49,7 @@ public class StepDefinitionHomepage {
     //Author: Jarko Piironen
     @Given("Webshop is available")
     public void webshopIsAvailable() {
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
+        driver.get(HOMEPAGE_URL);
     }
 
     //Author: Jarko Piironen
@@ -75,7 +76,7 @@ public class StepDefinitionHomepage {
         boolean syntaxErrorFound = false;
         List<LogEntry> Alllogs = logs.getAll();
         for (LogEntry entry : Alllogs) {
-            System.out.println(driver + " Console Error test " + entry.getMessage());
+            // System.out.println(driver + " Console Error test " + entry.getMessage());
             if (entry.getMessage().contains("Uncaught SyntaxError")) {
                 syntaxErrorFound = true;
 
@@ -117,7 +118,7 @@ public class StepDefinitionHomepage {
         return (expiryDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
     }
 
-    // Verify navigation links
+    // Verify footer navigation links
     // Author: Jarko Piironen
     @When("the user clicks the following {string} link")
     public void theUserClicksTheFollowingLink(String linkText) {
@@ -201,7 +202,7 @@ public class StepDefinitionHomepage {
     }
 
     // Author: Barnali Mohanty
-    @Then("the image height should be {string}")
+    @And("the image height should be {string}")
     public void theImageHeightShouldBe(String expectedHeight) {
         // Get the `height` attribute value
         String actualHeight = imgElement.getAttribute("height");
@@ -212,7 +213,7 @@ public class StepDefinitionHomepage {
     }
 
     // Author: Barnali Mohanty
-    @Then("the image should have an alt text")
+    @And("the image should have an alt text")
     public void theImageShouldHaveAnAltText() {
         String altText = imgElement.getAttribute("alt");
         System.out.println("Image alt text: '" + altText + "'");
@@ -229,12 +230,6 @@ public class StepDefinitionHomepage {
     }
 
     // Check if the declared language and content language match
-    // Author: Barnali Mohanty
-    @Given("I open the web page {string}")
-    public void i_open_the_web_page(String url) {
-        driver.get(url);
-    }
-
     // Author: Barnali Mohanty
     @When("I check the {string} attribute of the {string} tag")
     public void i_check_the_attribute_of_the_tag(String attribute, String tagName) {
@@ -276,12 +271,6 @@ public class StepDefinitionHomepage {
 
     // Check website title
     // Author: Barnali Mohanty
-    @Given("User is on the Webpage")
-    public void user_is_on_the_webpage() {
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app/");
-    }
-
-    // Author: Barnali Mohanty
     @When("User checks the title")
     public void userChecksTheTitle() {
         // Placeholder step for checking the title,No need of code
@@ -310,12 +299,6 @@ public class StepDefinitionHomepage {
 
     // User checks the main heading text
     // Author: Barnali Mohanty
-    @Given("User is on the Home page")
-    public void userIsOnTheHomePage() {
-        driver.get("https://webshop-agil-testautomatiserare.netlify.app");
-    }
-
-    // Author: Barnali Mohanty
     @When("User checks the main heading")
     public void userChecksTheMainHeading() {
         // Placeholder: Action will be verified in the next step
@@ -339,63 +322,16 @@ public class StepDefinitionHomepage {
 
     // Verify header navigation links work
     // Author: Ingela Bladh
-    @Given("User visits {string}")
-    public void userVisits(String webshopUrl) {
-        driver.get(webshopUrl);
-    }
-
-    // Verify that the Shop link works
-    // Author: Ingela Bladh
-    @When("User clicks Shop link")
-    public void userClicksShopLink() {
-        clickElement("body > header > div > div > ul > li:nth-child(2) > a");
-    }
-
-    // Verify that the About link works
-    // Author: Ingela Bladh
-    @When("User clicks About link")
-    public void userClicksAboutLink() {
-        clickElement("body > header > div > div > ul > li:nth-child(3) > a");
-    }
-
-    // Verify that the Checkout button works
-    // Author: Ingela Bladh
-    @When("User clicks Checkout button")
-    public void userClicksCheckoutButton() {
-        clickElement("body > header > div > div > div > a");
-    }
-
-    // Verify that the Home image link works
-    // Author: Ingela Bladh
-    @When("User clicks Home image link")
-    public void userClicksHomeImageLink() {
-        clickElement("body > header > div > div > a > h1");
-    }
-
-    // Verify that the Home link works
-    // Author: Ingela Bladh
-    @When("User clicks Home link")
-    public void userClicksHomeLink() {
-        clickElement("body > header > div > div > ul > li:nth-child(1) > a");
-    }
-
-    // Author: Ingela Bladh
-    @Then("The current url should be {string}")
-    public void theCurrentUrlShouldBe(String expectedUrl) {
-        assertEquals(expectedUrl, driver.getCurrentUrl());
-    }
-
-    // Verify that the "All products" button on Homepage leads to the Products page
-    // Author: Ingela Bladh
-    @When("User clicks All products button")
-    public void userClicksAllProductsButton() {
-        clickElement("body > div.container.my-5 > div > div.col-lg-7.p-3.p-lg-5.pt-lg-3 > div > button");
-    }
-
-    // Author: Ingela Bladh
-    private void clickElement(String cssSelector) {
+    @When("User clicks link with {string}")
+    public void userClicksLinkWith(String cssSelector) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector(cssSelector))).click();
+    }
+
+    // Author: Ingela Bladh
+    @Then("The page displayed should be {string}")
+    public void thePageDisplayedShouldBe(String expectedPage) {
+        assertEquals(HOMEPAGE_URL + expectedPage, driver.getCurrentUrl());
     }
 }
