@@ -179,6 +179,7 @@ public class StepDefinitionCheckout {
     }
 
     // Verify the Continue to checkout button works
+    // Author: Ingela Bladh
     @Then("The form tag should have the classes {string}")
     public void theFormTagShouldHaveTheClasses(String expectedClasses) {
         WebDriverWait wait = createWebDriverWait();
@@ -256,8 +257,10 @@ public class StepDefinitionCheckout {
     // Author: Barnali Mohanty
     @When("the user clicks the Add to Cart button")
     public void userClicksAddToCartButton() throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement addToCartButton = driver.findElement(By.xpath("//*[@id=\"main\"]/div[2]/div/div/button"));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        WebElement addToCartButton = wait.until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.xpath("//*[@id=\"main\"]/div[2]/div/div/button")));
 
         //Add time for the page to load properly
 
@@ -270,7 +273,6 @@ public class StepDefinitionCheckout {
 
         Thread.sleep(2000);
         // See if the cart is updated ,when you click the add to cart button
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         boolean countUpdated = wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("buttonSize"), "1"));
         if (countUpdated) {
             WebElement cartCount = driver.findElement(By.id("buttonSize"));
