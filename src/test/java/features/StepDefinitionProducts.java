@@ -131,29 +131,18 @@ public class StepDefinitionProducts {
     public void theUserVerifiesThatTheLoadsItsRespectiveProducts(String filter) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        // Try waiting for the 'main' element to become visible
-        WebElement mainElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("main")));
-
-        // Retrieve all div elements under the 'main' element
-        List<WebElement> divsUnderMain = mainElement.findElements(By.cssSelector("div"));
-        // System.out.println("divs under main WITHOUT all: " + divsUnderMain);
-
         if (filter.equals("All")) {
             // For the "All" filter, verify that at least one div under 'main' has the 'col' class
-            Assertions.assertFalse(divsUnderMain.isEmpty(), "No divs under 'main' with 'col' class displayed under 'All' filter");
-
-            boolean colClassExists = false;
-            for (WebElement div : divsUnderMain) {
-                String classAttribute = div.getAttribute("class");
-                // System.out.println("Found class for div: " + classAttribute); // Log the class attribute
-                if ("col".equals(classAttribute)) {
-                    colClassExists = true;
-                }
-            }
-            Assertions.assertTrue(colClassExists, "No div with class 'col' found under 'All' filter");
+            // Retrieve first div element under the 'main' element
+            WebElement divUnderMain = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#main > div:nth-child(1)")));
+            assertNotNull(divUnderMain, "No divs under 'main' with 'col' class displayed under 'All' filter");
+            String classAttribute = divUnderMain.getAttribute("class");
+            assertEquals("col", classAttribute, "No div with class 'col' found under 'All' filter");
         } else {
-            // For other filters, ensure that no div under 'main' has the 'col' class
-            // System.out.println("divs under main: " + divsUnderMain);
+            // For other filters, ensure that there are no divs under 'main'
+            // Try waiting for the 'main' element to become visible
+            WebElement mainElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("main")));
+            List<WebElement> divsUnderMain = mainElement.findElements(By.tagName("div"));
             Assertions.assertTrue(divsUnderMain.isEmpty(), "No divs under 'main' displayed under filter '" + filter + "'");
         }
     }

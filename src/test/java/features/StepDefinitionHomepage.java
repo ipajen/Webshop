@@ -76,7 +76,7 @@ public class StepDefinitionHomepage {
         boolean syntaxErrorFound = false;
         List<LogEntry> Alllogs = logs.getAll();
         for (LogEntry entry : Alllogs) {
-            System.out.println(driver + " Console Error test " + entry.getMessage());
+            // System.out.println(driver + " Console Error test " + entry.getMessage());
             if (entry.getMessage().contains("Uncaught SyntaxError")) {
                 syntaxErrorFound = true;
 
