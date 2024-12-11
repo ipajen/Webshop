@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class StepDefinitionProducts {
@@ -106,83 +107,54 @@ public class StepDefinitionProducts {
     //Validate Filter Functionality
     //Author: Jarko Piironen
     @When("the user clicks on {string}")
-    public void theUserClicksOn(String filter) throws InterruptedException {
-        Thread.sleep(1000);
+    public void theUserClicksOn(String filter) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        String cssSelector;
 
         // Map each filter to its corresponding CSS selector
-        switch (filter) {
-            case "All":
-                cssSelector = "body > div.container.mt-5 > div > ul > li:nth-child(1) > a";
-                break;
-            case "Men's clothing":
-                cssSelector = "body > div.container.mt-5 > div > ul > li:nth-child(2) > a";
-                break;
-            case "Women's clothing":
-                cssSelector = "body > div.container.mt-5 > div > ul > li:nth-child(3) > a";
-                break;
-            case "Jewelery":
-                cssSelector = "body > div.container.mt-5 > div > ul > li:nth-child(4) > a";
-                break;
-            case "Electronics":
-                cssSelector = "body > div.container.mt-5 > div > ul > li:nth-child(5) > a";
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid filter: " + filter);
-        }
+        String cssSelector = switch (filter) {
+            case "All" -> "body > div.container.mt-5 > div > ul > li:nth-child(1) > a";
+            case "Men's clothing" -> "body > div.container.mt-5 > div > ul > li:nth-child(2) > a";
+            case "Women's clothing" -> "body > div.container.mt-5 > div > ul > li:nth-child(3) > a";
+            case "Jewelery" -> "body > div.container.mt-5 > div > ul > li:nth-child(4) > a";
+            case "Electronics" -> "body > div.container.mt-5 > div > ul > li:nth-child(5) > a";
+            default -> throw new IllegalArgumentException("Invalid filter: " + filter);
+        };
 
-        try {
-            // Wait for the element to be clickable
-            WebElement filterElement = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(cssSelector)));
-            filterElement.click();
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            // Fail the test explicitly if the element cannot be clicked
-            Assertions.fail("Failed to click on the filter: " + filter + ". Error: " + e.getMessage());
-        }
+        // Wait for the element to be clickable
+        WebElement filterElement = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(cssSelector)));
+        assertNotNull(filterElement);
+        filterElement.click();
     }
 
     // Author: Jarko Piironen
     @Then("the user verifies that the {string} loads its respective products")
     public void theUserVerifiesThatTheLoadsItsRespectiveProducts(String filter) {
-        try {
-            // Try waiting for the 'main' element to become visible
-            WebElement mainElement = driver.findElement(By.id("main"));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-            // Retrieve all div elements under the 'main' element
-            List<WebElement> divsUnderMain = mainElement.findElements(By.cssSelector("div"));
-            System.out.println("divs under main WITHOUT all: " + divsUnderMain);
+        // Try waiting for the 'main' element to become visible
+        WebElement mainElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("main")));
 
-            if (filter.equals("All")) {
-                // For the "All" filter, verify that at least one div under 'main' has the 'col' class
-                Assertions.assertFalse(divsUnderMain.isEmpty(), "No divs under 'main' with 'col' class displayed under 'All' filter");
+        // Retrieve all div elements under the 'main' element
+        List<WebElement> divsUnderMain = mainElement.findElements(By.cssSelector("div"));
+        // System.out.println("divs under main WITHOUT all: " + divsUnderMain);
 
-                boolean colClassExists = false;
-                for (WebElement div : divsUnderMain) {
-                    String classAttribute = div.getAttribute("class");
-                    System.out.println("Found class for div: " + classAttribute); // Log the class attribute
-                    if ("col".equals(classAttribute)) {
-                        colClassExists = true;
-                    }
-                }
-                Assertions.assertTrue(colClassExists, "No div with class 'col' found under 'All' filter");
-            } else {
-                // For other filters, ensure that no div under 'main' has the 'col' class
-                List<WebElement> divsUnderMain2 = mainElement.findElements(By.cssSelector("div"));
-                System.out.println("divs under main: " + divsUnderMain2);
-                Assertions.assertTrue(divsUnderMain2.isEmpty(), "No divs under 'main' displayed under filter '" + filter + "'");
+        if (filter.equals("All")) {
+            // For the "All" filter, verify that at least one div under 'main' has the 'col' class
+            Assertions.assertFalse(divsUnderMain.isEmpty(), "No divs under 'main' with 'col' class displayed under 'All' filter");
 
-                for (WebElement div : divsUnderMain2) {
-                    String classAttribute = div.getAttribute("class");
-                    System.out.println("Found class for div: " + classAttribute); // Log the class attribute
-                    Assertions.assertFalse("col".equals(classAttribute), "Div under filter '" + filter + "' should not have class 'col'");
+            boolean colClassExists = false;
+            for (WebElement div : divsUnderMain) {
+                String classAttribute = div.getAttribute("class");
+                // System.out.println("Found class for div: " + classAttribute); // Log the class attribute
+                if ("col".equals(classAttribute)) {
+                    colClassExists = true;
                 }
             }
-        } catch (Exception e) {
-            // Handle any exception that might occur
-            System.out.println("An error occurred: " + e.getMessage());
-            throw e;
+            Assertions.assertTrue(colClassExists, "No div with class 'col' found under 'All' filter");
+        } else {
+            // For other filters, ensure that no div under 'main' has the 'col' class
+            // System.out.println("divs under main: " + divsUnderMain);
+            Assertions.assertTrue(divsUnderMain.isEmpty(), "No divs under 'main' displayed under filter '" + filter + "'");
         }
     }
 
@@ -212,5 +184,20 @@ public class StepDefinitionProducts {
             // Add to cart button
             assertNotNull(cardBody.findElement(By.tagName("button")));
         }
+    }
+
+    // Verify Home navigation links in header work
+    // Author: Ingela Bladh
+    @When("User clicks home link with {string}")
+    public void userClicksHomeLinkWith(String cssSelector) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector(cssSelector))).click();
+    }
+
+    // Author: Ingela Bladh
+    @Then("The homepage should be displayed")
+    public void theHomepageShouldBeDisplayed() {
+        assertEquals("https://webshop-agil-testautomatiserare.netlify.app/", driver.getCurrentUrl());
     }
 }
