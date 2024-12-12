@@ -21,6 +21,6 @@ By leveraging **Cucumber**, the tests are written in a behavior-driven developme
 - **Version Control**: Git
 - **Reporting**: Cucumber HTML Reports
 ## **Authors**
- - ** Ingela Bladh
- - ** Barnali Mohanty
- - ** Jarko Piironen
+ - Ingela Bladh
+ - Barnali Mohanty
+ - Jarko Piironen
